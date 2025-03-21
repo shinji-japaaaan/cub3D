@@ -6,7 +6,7 @@
 /*   By: sishizaw <sishizaw@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/20 11:25:20 by karai             #+#    #+#             */
-/*   Updated: 2025/03/21 12:26:23 by sishizaw         ###   ########.fr       */
+/*   Updated: 2025/03/21 13:48:54 by sishizaw         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,8 @@
 # define CUB3D_H
 
 # include "../minilibx-linux/mlx.h"
+# include "../libft/libft.h"
+# include <unistd.h>
 # include <fcntl.h>
 # include <math.h>
 # include <stdbool.h>
@@ -33,6 +35,8 @@
 # define DOWN_ARROW 65364
 # define LEFT_ARROW 65361
 # define ESCAPE 65307
+
+#define BUFFER_SIZE 1024
 
 typedef struct s_map
 {
@@ -84,22 +88,9 @@ typedef struct s_all
 	void		*map_ea;
 }				t_all;
 
-void			initialize_window(t_all *all);
-int				map_close(t_all *all);
-int				ft_key_hook(int keycode, t_all *all);
+//init.c
+t_map *init_map(void);
+void parse_cub_file(char *filename, t_map *map);
 
-// hit_utils.c
-double			cnv_rad(double angle);
-bool			is_out_map(t_all *all, int hit_ij[2]);
-bool			is_wall(t_all *all, int hit_ij[2]);
-
-// hit_horz.c
-void			get_map_horz_idx(double Ax, double Ay, double angle,
-					int hit_ij[2]);
-double			horz_dist(t_all all[1], double angle);
-
-// hit_vert.c
-void get_map_vert_idx(double Ax, double Ay, double angle, int hit_ij[2]);
-double vert_dist(t_all all[1], double angle);
 
 #endif

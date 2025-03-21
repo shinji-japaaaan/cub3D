@@ -6,7 +6,7 @@
 #    By: sishizaw <sishizaw@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/03/21 12:07:24 by sishizaw          #+#    #+#              #
-#    Updated: 2025/03/21 12:24:56 by sishizaw         ###   ########.fr        #
+#    Updated: 2025/03/21 13:46:10 by sishizaw         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -22,7 +22,9 @@ LIBFT_DIR = ./libft
 LIBFT = $(LIBFT_DIR)/libft.a
 LIBFT_FLAGS = -L$(LIBFT_DIR) -lft
 
-SRCS = ./srcs/main.c
+SRCS = ./srcs/main.c \
+		./srcs/init.c \
+		./srcs/parse_map.c
 OBJS = $(SRCS:.c=.o)
 
 all: $(LIBFT) $(MLX_LIB) $(NAME)
