@@ -6,7 +6,7 @@
 /*   By: sishizaw <sishizaw@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/21 13:36:18 by sishizaw          #+#    #+#             */
-/*   Updated: 2025/03/23 11:04:21 by sishizaw         ###   ########.fr       */
+/*   Updated: 2025/03/23 18:27:48 by sishizaw         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,9 +54,18 @@ char *parse_texture(char *line)
     while (line[i] == ' ')
         i++;
 
+    // テクスチャパスが空でないかチェック
+    if (line[i] == '\0')
+        exit(printf("Error: Missing texture path\n"));
+
     // テクスチャパスをコピー
-    return strdup(&line[i]);
+    char *texture_path = strdup(&line[i]);
+    if (!texture_path)
+        exit(printf("Error: Memory allocation failed for texture path\n"));
+
+    return texture_path;
 }
+
 
 char **parse_map(char **lines, int start, int height)
 {
@@ -85,6 +94,12 @@ char **parse_map(char **lines, int start, int height)
 
 int open_file(const char *filename)
 {
+    if (!filename || strlen(filename) < 4 || strcmp(filename + strlen(filename) - 4, ".cub") != 0)
+    {
+        printf("Error: Invalid file format (expected .cub file)\n");
+        exit(EXIT_FAILURE);
+    }
+
     int fd = open(filename, O_RDONLY);
     if (fd == -1)
     {
@@ -98,11 +113,14 @@ int open_file(const char *filename)
 char *read_line(int fd)
 {
     char *buffer = malloc(BUFFER_SIZE);
+    if (!buffer)
+    {
+        perror("Error: Memory allocation failed for buffer");
+        return NULL;
+    }
+
     int bytes_read;
     int i = 0;
-
-    if (!buffer)
-        return NULL;
 
     while ((bytes_read = read(fd, &buffer[i], 1)) > 0)
     {
@@ -115,32 +133,90 @@ char *read_line(int fd)
         if (i >= BUFFER_SIZE - 1)
             break;
     }
-    free(buffer);
-    return NULL;
+
+    if (bytes_read == -1)
+    {
+        perror("Error reading file");
+        free(buffer);
+        return NULL;
+    }
+
+    if (i == 0) // EOF か空行
+    {
+        free(buffer);
+        return NULL;
+    }
+
+    buffer[i] = '\0';
+    return buffer;
 }
 
+void **custom_realloc(void **ptr, int old_size, int new_size)
+{
+    void **new_ptr;
+    int i;
+
+    // 新しいメモリ領域を確保
+    new_ptr = (void **)malloc(sizeof(void *) * new_size);
+    if (!new_ptr)
+        return NULL;
+
+    // 既存のデータをコピー
+    for (i = 0; i < old_size; i++)
+        new_ptr[i] = ptr[i];
+
+    // 古いメモリを解放
+    free(ptr);
+
+    return new_ptr;
+}
 
 char **read_lines(const char *filename)
 {
-    int fd = open_file(filename);
+    int fd = open(filename, O_RDONLY);
     char **lines = NULL;
     char *line;
     int count = 0;
+    int capacity = 20;
 
-    lines = malloc(sizeof(char *) * (BUFFER_SIZE));
-    if (!lines)
+    if (fd < 0)
         return NULL;
 
+    // 初期メモリ確保
+    lines = (char **)malloc(sizeof(char *) * capacity);
+    if (!lines)
+    {
+        close(fd);
+        return NULL;
+    }
+
+    // 1行ずつ読み込む
     while ((line = read_line(fd)) != NULL)
     {
+        if (count >= capacity - 1)
+        {
+            int new_capacity = capacity * 2;
+            char **new_lines = (char **)custom_realloc(
+                (void **)lines, capacity, new_capacity);
+            if (!new_lines)
+            {
+                free(line);
+                for (int j = 0; j < count; j++)
+                    free(lines[j]);
+                free(lines);
+                close(fd);
+                return NULL;
+            }
+            lines = new_lines;
+            capacity = new_capacity;
+        }
         lines[count++] = line;
     }
-    lines[count] = NULL; // NULL 終端
 
+    lines[count] = NULL; // NULL 終端
     close(fd);
     return lines;
 }
-
 
 void free_lines(char **lines)
 {
@@ -148,6 +224,35 @@ void free_lines(char **lines)
     while (lines[i])
         free(lines[i++]);
     free(lines);
+}
+
+int validate_cub_format(char **lines)
+{
+    int has_map = 0;
+    int has_config = 0;
+    int has_floor = 0;
+    int has_ceiling = 0;
+
+    for (int i = 0; lines[i]; i++)
+    {
+        if (ft_strchr(lines[i], '1')) // マップデータがあるか
+            has_map = 1;
+        // テクスチャ設定 (完全一致でチェック)
+        if (strncmp(lines[i], "NO ", 3) == 0 || strncmp(lines[i], "SO ", 3) == 0 ||
+            strncmp(lines[i], "WE ", 3) == 0 || strncmp(lines[i], "EA ", 3) == 0)
+            has_config = 1;
+
+        // 床の色 (Floor)
+        if (strncmp(lines[i], "F ", 2) == 0)
+            has_floor = 1;
+
+        // 天井の色 (Ceiling)
+        if (strncmp(lines[i], "C ", 2) == 0)
+            has_ceiling = 1;
+    }
+    if (!has_map || !has_config || !has_floor || !has_ceiling)
+        return 0;
+    return 1;
 }
 
 
@@ -163,9 +268,16 @@ void parse_cub_file(const char *filename, t_map *map)
     if (!lines)
     {
         printf("Error: Failed to read file\n");
-        return;
+        exit(EXIT_FAILURE);
     }
-
+    // ファイルフォーマットが正しいかチェック
+    if (!validate_cub_format(lines))
+    {
+        // フォーマットエラーの場合、メモリ解放して終了
+        free_lines(lines);
+        printf("Error: Invalid .cub file format\n");
+        exit(EXIT_FAILURE);
+    }
     // 各行を解析してマップ情報を格納
     while (lines[i])
     {
