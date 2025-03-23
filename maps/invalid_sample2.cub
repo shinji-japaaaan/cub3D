@@ -1,0 +1,14 @@
+# Invalid Cub3D Map with open walls (map is not closed)
+NO ./textures/north.xpm
+SO ./textures/south.xpm
+WE ./textures/west.xpm
+EA ./textures/east.xpm
+
+F 220,100,0 
+C 0,0,255
+
+1 1 1 1 1 1
+1 P 0 0 1 1
+1 0 0 0 0 1
+1 0 0 1 0 1
+1 1 1 0 1 1
