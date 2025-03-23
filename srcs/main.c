@@ -6,7 +6,7 @@
 /*   By: sishizaw <sishizaw@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/21 12:10:04 by sishizaw          #+#    #+#             */
-/*   Updated: 2025/03/21 16:25:54 by sishizaw         ###   ########.fr       */
+/*   Updated: 2025/03/23 13:20:04 by sishizaw         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,11 +38,12 @@
 //     return (0);
 // }
 
-//パースチェック用
+// パースチェック用
 // int main(int argc, char **argv)
 // {
 //     t_map *map;
 
+//     (void)argc;
 //     map = init_map();
 //     if (!map)
 //     {
@@ -50,64 +51,103 @@
 //         return (1);
 //     }
 
-//     if (argc != 2)
-//     {
-//         write(2, "Usage: ./cub3d <file.cub>\n", 26);
-//         return (1);
-//     }
-
-//     // .cubファイルのパース
+//     // .cubファイルを解析してマップ情報を取得
 //     parse_cub_file(argv[1], map);
 
-//     // パースされたデータの表示
-//     write(1, "Parsed Data:\n", 13);
-//     write(1, map->tex_no, ft_strlen(map->tex_no));
-//     write(1, "\n", 1);
-//     write(1, map->tex_so, ft_strlen(map->tex_so));
-//     write(1, "\n", 1);
-//     write(1, map->tex_we, ft_strlen(map->tex_we));
-//     write(1, "\n", 1);
-//     write(1, map->tex_ea, ft_strlen(map->tex_ea));
-//     write(1, "\n", 1);
-//     printf("Floor color: %d\n", map->floor_color);
-//     printf("Ceiling color: %d\n", map->ceil_color);
+//     // 結果を出力（簡単な確認用）
+//     printf("Textures:\n");
+//     printf("NO: %s\n", map->tex_no);
+//     printf("SO: %s\n", map->tex_so);
+//     printf("WE: %s\n", map->tex_we);
+//     printf("EA: %s\n", map->tex_ea);
 
-//     // メモリ解放
+//     printf("Floor Color: %d\n", map->floor_color);
+//     printf("Ceil Color: %d\n", map->ceil_color);
+
+//     printf("Map dimensions: %dx%d\n", map->height, map->width);
+//     printf("Map:\n");
+//     for (int i = 0; i < map->height; i++)
+//     {
+//         printf("%s\n", map->grid[i]);
+//     }
+
+//     // メモリ解放（必要に応じて）
+//     for (int i = 0; i < map->height; i++)
+//         free(map->grid[i]);
+//     free(map->grid);
 //     free(map->tex_no);
 //     free(map->tex_so);
 //     free(map->tex_we);
 //     free(map->tex_ea);
 
-//     return (0);
+//     return 0;
 // }
 
-//mlx初期化
-void cleanup_and_exit(t_game *game)
-{
-    if (game->img)
-        mlx_destroy_image(game->mlx, game->img);
-    if (game->win)
-        mlx_destroy_window(game->mlx, game->win);
-    free(game);
-    exit(EXIT_SUCCESS);
-}
+//画像描画用
+// int main(int argc, char **argv)
+// {
+//     t_map *map;
+//     t_game *game;
 
-int key_hook(int keycode, t_game *game)
-{
-    if (keycode == 65307) // ESCキーで終了
-        cleanup_and_exit(game);
-    return (0);
-}
+//     (void)argc;
+//     map = init_map();
+//     if (!map)
+//     {
+//         printf("Error: Failed to initialize map->\n");
+//         return (1);
+//     }
 
-int main(void)
+//     // .cubファイルを解析してマップ情報を取得
+//     parse_cub_file(argv[1], map);
+//     game = malloc(sizeof(t_game));
+//     if (!game)
+//     {
+//         perror("malloc failed");
+//         return (EXIT_FAILURE);
+//     }
+//     game->img = NULL;
+//     game->win = NULL;
+
+//     setup_window(game);
+//     load_texture(game);
+//     draw_image(game);
+
+//     mlx_key_hook(game->win, key_hook, game);
+//     mlx_loop(game->mlx);
+//     // メモリ解放（必要に応じて）
+//     for (int i = 0; i < map->height; i++)
+//         free(map->grid[i]);
+//     free(map->grid);
+//     free(map->tex_no);
+//     free(map->tex_so);
+//     free(map->tex_we);
+//     free(map->tex_ea);
+
+//     return 0;
+// }
+
+//メモリ管理関数用
+int main(int argc, char **argv)
 {
-    t_game *game = malloc(sizeof(t_game));
-    if (!game)
+    t_map *map;
+    t_game *game;
+
+    (void)argc;
+    map = init_map();
+    if (!map)
     {
-        perror("malloc failed");
-        return (EXIT_FAILURE);
+        perror("Memory allocation failed");
+        exit(EXIT_FAILURE);  // ここでも exit を使う
     }
+
+    // .cubファイルを解析してマップ情報を取得
+    parse_cub_file(argv[1], map);
+    if (!validate_map(map->grid))
+        exit_with_error(map, "Invalid map format");
     
+    game = malloc(sizeof(t_game));
+    if (!game)
+        exit_with_error(map, "malloc failed");
     game->img = NULL;
     game->win = NULL;
 
@@ -118,7 +158,6 @@ int main(void)
     mlx_key_hook(game->win, key_hook, game);
     mlx_loop(game->mlx);
 
-    return (0);
+    free_all(map);  // メモリ解放
+    cleanup_and_exit(game, EXIT_SUCCESS);  // 正常終了
 }
-
-

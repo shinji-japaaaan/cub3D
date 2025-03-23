@@ -1,13 +1,4 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   cub3d.h                                            :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: sishizaw <sishizaw@student.42.fr>          +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/03/20 11:25:20 by karai             #+#    #+#             */
-/*   Updated: 2025/03/23 13:16:00 by sishizaw         ###   ########.fr       */
-/*                                                                            */
+// File: cub3d.h
 /* ************************************************************************** */
 
 #ifndef CUB3D_H
@@ -53,20 +44,18 @@ typedef struct s_game
 
 //init.c
 t_map *init_map(void);
-void cleanup_and_exit(t_game *game, int exit_code);
-int key_hook(int keycode, t_game *game);
 void setup_window(t_game *game);
 void load_texture(t_game *game);
 void draw_image(t_game *game);
 
 //parse_map.c
-void parse_cub_file(const char *filename, t_map *map);
+void parse_cub_file(char *filename, t_map *map);
 
 //validate_map.c
 int validate_map(char **map);
 
-//free.c
-void free_all(t_map *map);
-void exit_with_error(t_map *map, char *msg);
+void cleanup_and_exit(t_game *game);
 
 #endif
+
+

@@ -6,110 +6,197 @@
 /*   By: sishizaw <sishizaw@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/21 13:36:18 by sishizaw          #+#    #+#             */
-/*   Updated: 2025/03/21 13:48:06 by sishizaw         ###   ########.fr       */
+/*   Updated: 2025/03/23 11:04:21 by sishizaw         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/cub3d.h"
 
-// 空白文字をスキップ
-char *skip_spaces(char *str)
-{
-    while (*str == ' ' || *str == '\t')
-        str++;
-    return (str);
-}
-
-// 文字列が特定のプレフィックスで始まっているか確認
-int starts_with(char *line, char *prefix)
-{
-    int i = 0;
-    while (prefix[i])
-    {
-        if (line[i] != prefix[i])
-            return (0);
-        i++;
-    }
-    return (1);
-}
-
-// テクスチャのパスを設定
-void set_texture(char **dest, char *line)
-{
-    while (*line && *line != ' ')
-        line++;
-    line = skip_spaces(line);
-    *dest = ft_strdup(line);
-}
-
-// RGBの色を解析
 int parse_color(char *line)
 {
+    int i = 1; // "F" または "C" の次の文字から開始
     int r, g, b;
-    r = g = b = 0;
 
-    while (*line && (*line < '0' || *line > '9'))
-        line++;
-    r = ft_atoi(line);
-    while (*line && *line != ',') line++;
-    if (*line == ',') line++;
+    // 空白をスキップ
+    while (line[i] == ' ')
+        i++;
 
-    g = ft_atoi(line);
-    while (*line && *line != ',') line++;
-    if (*line == ',') line++;
+    // 赤色値の取得
+    r = atoi(&line[i]);
+    while (line[i] && line[i] != ',')
+        i++;
+    if (line[i++] != ',')
+        exit(printf("Error: Invalid color format\n"));
 
-    b = ft_atoi(line);
-    return ((r << 16) | (g << 8) | b);
+    // 緑色値の取得
+    g = atoi(&line[i]);
+    while (line[i] && line[i] != ',')
+        i++;
+    if (line[i++] != ',')
+        exit(printf("Error: Invalid color format\n"));
+
+    // 青色値の取得
+    b = atoi(&line[i]);
+
+    // RGB値の範囲チェック
+    if (r < 0 || r > 255 || g < 0 || g > 255 || b < 0 || b > 255)
+        exit(printf("Error: RGB values out of range\n"));
+
+    // RGBを16進数に変換して返す
+    return (r << 16 | g << 8 | b);
 }
 
-// 1行を解析してデータを設定
-void parse_line(t_map *map, char *line)
+char *parse_texture(char *line)
 {
-    if (starts_with(line, "NO"))
-        set_texture(&map->tex_no, line + 2);
-    else if (starts_with(line, "SO"))
-        set_texture(&map->tex_so, line + 2);
-    else if (starts_with(line, "WE"))
-        set_texture(&map->tex_we, line + 2);
-    else if (starts_with(line, "EA"))
-        set_texture(&map->tex_ea, line + 2);
-    else if (line[0] == 'F')
-        map->floor_color = parse_color(line + 1);
-    else if (line[0] == 'C')
-        map->ceil_color = parse_color(line + 1);
+    int i = 2; // "NO", "SO", "WE", "EA" の後ろからスタート
+
+    // 空白をスキップ
+    while (line[i] == ' ')
+        i++;
+
+    // テクスチャパスをコピー
+    return strdup(&line[i]);
 }
 
-// .cubファイルをパース
-void parse_cub_file(char *filename, t_map *map)
+char **parse_map(char **lines, int start, int height)
 {
-    int fd;
-    char buffer[BUFFER_SIZE + 1];
-    size_t bytes_read;
-    char *line;
-    char *newline;
+    char **map;
+    int i;
 
-    fd = open(filename, O_RDONLY);
+    // メモリ確保
+    map = (char **)malloc(sizeof(char *) * (height + 1));
+    if (!map)
+        exit(printf("Error: Memory allocation failed\n"));
+
+    i = 0;
+    // マップをコピー
+    while (i < height)
+    {
+        map[i] = strdup(lines[start + i]);
+        if (!map[i])
+            exit(printf("Error: Memory allocation failed\n"));
+        i++;
+    }
+    map[i] = NULL; // NULL 終端
+
+    return map;
+}
+
+
+int open_file(const char *filename)
+{
+    int fd = open(filename, O_RDONLY);
     if (fd == -1)
     {
-        write(2, "Error opening file\n", 19);
-        exit(1);
+        perror("Error opening file");
+        exit(EXIT_FAILURE);
     }
+    return fd;
+}
 
-    while ((bytes_read = read(fd, buffer, BUFFER_SIZE)) > 0)
+
+char *read_line(int fd)
+{
+    char *buffer = malloc(BUFFER_SIZE);
+    int bytes_read;
+    int i = 0;
+
+    if (!buffer)
+        return NULL;
+
+    while ((bytes_read = read(fd, &buffer[i], 1)) > 0)
     {
-        buffer[bytes_read] = '\0';
-        line = buffer;
-        while (*line)
+        if (buffer[i] == '\n' || buffer[i] == '\0')
         {
-            newline = line;
-            while (*newline && *newline != '\n')
-                newline++;
-            if (*newline == '\n')
-                *newline++ = '\0';
-
-            parse_line(map, line);
-            line = newline;
+            buffer[i] = '\0';
+            return buffer;
         }
+        i++;
+        if (i >= BUFFER_SIZE - 1)
+            break;
     }
+    free(buffer);
+    return NULL;
+}
+
+
+char **read_lines(const char *filename)
+{
+    int fd = open_file(filename);
+    char **lines = NULL;
+    char *line;
+    int count = 0;
+
+    lines = malloc(sizeof(char *) * (BUFFER_SIZE));
+    if (!lines)
+        return NULL;
+
+    while ((line = read_line(fd)) != NULL)
+    {
+        lines[count++] = line;
+    }
+    lines[count] = NULL; // NULL 終端
+
     close(fd);
+    return lines;
+}
+
+
+void free_lines(char **lines)
+{
+    int i = 0;
+    while (lines[i])
+        free(lines[i++]);
+    free(lines);
+}
+
+
+void parse_cub_file(const char *filename, t_map *map)
+{
+    char **lines;
+    int i = 0;
+    int map_start = 0;
+    int map_height = 0;
+
+    // linesに全行を読み込む
+    lines = read_lines(filename);
+    if (!lines)
+    {
+        printf("Error: Failed to read file\n");
+        return;
+    }
+
+    // 各行を解析してマップ情報を格納
+    while (lines[i])
+    {
+        if (strncmp(lines[i], "NO ", 3) == 0)
+            map->tex_no = parse_texture(lines[i]);
+        else if (strncmp(lines[i], "SO ", 3) == 0)
+            map->tex_so = parse_texture(lines[i]);
+        else if (strncmp(lines[i], "WE ", 3) == 0)
+            map->tex_we = parse_texture(lines[i]);
+        else if (strncmp(lines[i], "EA ", 3) == 0)
+            map->tex_ea = parse_texture(lines[i]);
+        else if (lines[i][0] == 'F')
+            map->floor_color = parse_color(lines[i]);
+        else if (lines[i][0] == 'C')
+            map->ceil_color = parse_color(lines[i]);
+        else if (lines[i][0] == '1' || lines[i][0] == '0' || 
+                 lines[i][0] == 'N' || lines[i][0] == 'S' || 
+                 lines[i][0] == 'E' || lines[i][0] == 'W')
+        {
+            if (map_start == 0)
+                map_start = i;
+            map_height++;
+        }
+        i++;
+    }
+
+    // マップ情報を解析して格納
+    map->grid = parse_map(lines, map_start, map_height);
+    map->height = map_height;
+    map->width = strlen(map->grid[0]);
+
+    // 使用したメモリの解放
+    free_lines(lines);
 }
