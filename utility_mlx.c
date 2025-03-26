@@ -6,7 +6,7 @@
 /*   By: karai <karai@student.42tokyo.jp>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/20 11:38:35 by karai             #+#    #+#             */
-/*   Updated: 2025/03/23 10:13:22 by karai            ###   ########.fr       */
+/*   Updated: 2025/03/26 23:20:24 by karai            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,14 +22,16 @@ void	initialize_window(t_all *all)
 	all->img.img = mlx_new_image(all->mlx, WIND_WIDTH, WIND_HEIGHT);
 	all->img.addr = mlx_get_data_addr(all->img.img, &(all->img.bits_per_pixel),
 			&(all->img.line_length), &(all->img.endian));
-	// all->map_no = mlx_xpm_file_to_image(all->mlx, all->map->tex_no, &tmp1,
-	// 		&tmp1);
-	// all->map_so = mlx_xpm_file_to_image(all->mlx, all->map->tex_so, &tmp1,
-	// 		&tmp1);
-	// all->map_we = mlx_xpm_file_to_image(all->mlx, all->map->tex_we, &tmp1,
-	// 		&tmp1);
-	// all->map_ea = mlx_xpm_file_to_image(all->mlx, all->map->tex_ea, &tmp1,
-	// 		&tmp1);
+	all->img.map_no = mlx_xpm_file_to_image(all->mlx, all->map->tex_no, &tmp1,
+			&tmp1);
+	all->img.addr_no = mlx_get_data_addr(all->img.map_no, &(all->img.bpp_no),
+			&(all->img.line_length_no), &(all->img.endian_no));
+	all->img.map_so = mlx_xpm_file_to_image(all->mlx, all->map->tex_so, &tmp1,
+			&tmp1);
+	all->img.map_we = mlx_xpm_file_to_image(all->mlx, all->map->tex_we, &tmp1,
+			&tmp1);
+	all->img.map_ea = mlx_xpm_file_to_image(all->mlx, all->map->tex_ea, &tmp1,
+			&tmp1);
 	// i = 0;
 	// while ( // condition)
 	// {
@@ -44,6 +46,14 @@ void	my_mlx_pixel_put(t_img *img, int x, int y, int color)
 
 	dst = img->addr + (y * img->line_length + x * (img->bits_per_pixel / 8));
 	*(unsigned int *)dst = color;
+}
+
+int	my_mlx_pixel_get(t_img *img, int x, int y)
+{
+	char	*src;
+
+	src = img->addr_no + (y * img->line_length_no + x * (img->bpp_no / 8));
+	return (*(int *)src);
 }
 
 void	img_show(t_all *all)
@@ -152,6 +162,7 @@ int	ft_key_hook(int keycode, t_all *all)
 		player->px = newPlayerX;
 		player->py = newPlayerY;
 	}
-	player->ang =normalize_rad(player->ang);
-	printf("px py %lf %lf %lf\n", player->px, player->py, player->ang * 180 / M_PI);
+	player->ang = normalize_rad(player->ang);
+	printf("px py %lf %lf %lf\n", player->px, player->py, player->ang * 180
+		/ M_PI);
 }

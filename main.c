@@ -6,7 +6,7 @@
 /*   By: karai <karai@student.42tokyo.jp>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/20 20:56:01 by karai             #+#    #+#             */
-/*   Updated: 2025/03/23 11:31:09 by karai            ###   ########.fr       */
+/*   Updated: 2025/03/26 23:07:19 by karai            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,9 +38,15 @@ int	main(void)
 	all->map->height = 5;
 	all->map->wind_width = all->map->width * TILE_SIZE;
 	all->map->wind_height = all->map->height * TILE_SIZE;
+	all->map->tex_no = "./textures/north.xpm";
+	all->map->tex_so = "./textures/south.xpm";
+	all->map->tex_ea = "./textures/east.xpm";
+	all->map->tex_we = "./textures/west.xpm";
+
 	all->dPP = (double)(WIND_WIDTH / 2) / tan(cnv_rad(FOV_ANGLE / 2));
 	printf("px py %lf %lf\n", all->player->px, all->player->py);
 	initialize_window(all);
+	printf("reach\n");
 	mlx_hook(all->mlx_win, 17, 0, map_close, all);
 	// mlx_hook(all->mlx_win, X_EVENT_KEY_PRESS, 1L << 0, &ft_key_hook, all);
 	// mlx_hook(all->mlx_win, X_EVENT_KEY_RELEASE, (1L << 1), &ft_key_release,
