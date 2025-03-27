@@ -22,19 +22,20 @@ int	get_horz_idx(t_all *all, double angle, double dist, int case_hd)
 	double	tx;
 	double	ty;
 	double	tmp;
+
 	if (case_hd == 1)
 	{
-		ty = all->player->px + cos(angle) * dist;
-		tmp = fmod(ty, (double)TILE_SIZE) * (double)IMG_SIZE
+		tx = all->player->px + cos(angle) * dist;
+		tmp = fmod(tx, (double)TILE_SIZE) * (double)IMG_SIZE
 			/ (double)TILE_SIZE;
-		return (ceil(tmp));
+		return (floor(tmp));
 	}
 	else
 	{
-		tx = all->player->py + sin(angle) * dist;
-		tmp = fmod(tx, (double)TILE_SIZE) * (double)IMG_SIZE
+		ty = all->player->py - sin(angle) * dist;
+		tmp = fmod(ty, (double)TILE_SIZE) * (double)IMG_SIZE
 			/ (double)TILE_SIZE;
-		return (ceil(tmp));
+		return (floor(tmp));
 	}
 }
 
@@ -59,12 +60,28 @@ void	put_1line_rev(t_all *all, int i, double wallStripHeight, double angle,
 	{
 		if (j < offset)
 		{
-			j+= 1;
+			j += 1;
 			continue ;
 		}
 		img_vert_idx = ceil(temp * (j - offset));
-		// printf("%d %d\n",img_horz_idx, img_vert_idx);
-		color = my_mlx_pixel_get(&(all->img), img_horz_idx, img_vert_idx);
+		if (case_hd == 1)
+		{
+			if (0 <= angle && angle < M_PI)
+				color = my_mlx_pixel_get(all->xpm_no, img_horz_idx,
+						img_vert_idx);
+			else
+				color = my_mlx_pixel_get(all->xpm_so, IMG_SIZE - 1
+						- img_horz_idx, img_vert_idx);
+		}
+		else
+		{
+			if (M_1by2PI <= angle && angle < M_3by2PI)
+				color = my_mlx_pixel_get(all->xpm_we, IMG_SIZE - 1
+						- img_horz_idx, img_vert_idx);
+			else
+				color = my_mlx_pixel_get(all->xpm_ea, img_horz_idx,
+						img_vert_idx);
+		}
 		my_mlx_pixel_put(&(all->img), i, j, color);
 		j += 1;
 	}
@@ -147,13 +164,17 @@ void	img_raycast(t_all *all)
 		hd = horz_dist(all, ray_angle);
 		vd = vert_dist(all, ray_angle);
 		if (vd < 0)
-			put_1line_case_hd_vd(all, ray_angle, i, 1, hd, vd, ray_angle); // case hd = 1
+			put_1line_case_hd_vd(all, ray_angle, i, 1, hd, vd, ray_angle);
+		// case hd = 1
 		else if (hd < 0)
-			put_1line_case_hd_vd(all, ray_angle, i, 2, hd, vd, ray_angle); // case vd = 2
+			put_1line_case_hd_vd(all, ray_angle, i, 2, hd, vd, ray_angle);
+		// case vd = 2
 		else if (hd <= vd)
-			put_1line_case_hd_vd(all, ray_angle, i, 1, hd, vd, ray_angle); // case hd = 1
+			put_1line_case_hd_vd(all, ray_angle, i, 1, hd, vd, ray_angle);
+		// case hd = 1
 		else
-			put_1line_case_hd_vd(all, ray_angle, i, 2, hd, vd, ray_angle); // case vd = 2
+			put_1line_case_hd_vd(all, ray_angle, i, 2, hd, vd, ray_angle);
+		// case vd = 2
 		// printf("wall height %lf\n", wallStripHeight);
 		// printf("%lf %lf %lf\n", hd, vd, ray_angle * 180 / M_PI);
 		ray_angle -= stp_ang;

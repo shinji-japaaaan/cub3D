@@ -6,7 +6,7 @@
 /*   By: karai <karai@student.42tokyo.jp>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/22 16:46:46 by karai             #+#    #+#             */
-/*   Updated: 2025/03/23 09:35:37 by karai            ###   ########.fr       */
+/*   Updated: 2025/03/27 22:54:42 by karai            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,28 +34,29 @@ void	update(t_all *all, t_player *player)
 	double	newPlayerY;
 
 	player->ang += player->turnDirection * player->rotSpeed;
+	player->ang = normalize_rad(player->ang);
 	if (player->walkDirection == MOVE_FRONT)
 	{
 		newPlayerX = player->px + cos(player->ang) * player->moveSpeed;
-		newPlayerY = player->py + sin(player->ang) * player->moveSpeed;
+		newPlayerY = player->py + sin(player->ang) * -1 * player->moveSpeed;
 	}
 	else if (player->walkDirection == MOVE_BACK)
 	{
 		newPlayerX = player->px + cos(player->ang) * -1 * player->moveSpeed;
-		newPlayerY = player->py + sin(player->ang) * -1 * player->moveSpeed;
+		newPlayerY = player->py + sin(player->ang) * player->moveSpeed;
 	}
 	else if (player->walkDirection == MOVE_LEFT)
 	{
 		newPlayerX = player->px + cos(normalize_rad(player->ang + cnv_rad(90)))
 			* player->moveSpeed;
 		newPlayerY = player->py + sin(normalize_rad(player->ang + cnv_rad(90)))
-			* player->moveSpeed;
+			* -1 * player->moveSpeed;
 	}
 	else if (player->walkDirection == MOVE_RIGHT)
 	{
-		newPlayerX = player->px + cos(normalize_rad(player->ang + cnv_rad(270)))
-			* player->moveSpeed;
-		newPlayerY = player->py + sin(normalize_rad(player->ang + cnv_rad(270)))
+		newPlayerX = player->px + cos(normalize_rad(player->ang + cnv_rad(90)))
+			* -1 * player->moveSpeed;
+		newPlayerY = player->py + sin(normalize_rad(player->ang + cnv_rad(90)))
 			* player->moveSpeed;
 	}
 	else
