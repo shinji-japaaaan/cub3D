@@ -118,28 +118,17 @@ void	put_1line_case_hd_vd(t_all *all, double ray_angle, int i,
 	double	perpDistance;
 	double	wallStripHeight;
 
-	if (case_hd_vd == 1) // case hd
+	if (case_hd_vd == 1)
 	{
-		// printf("hd ");
 		perpDistance = hd * cos(ray_angle - all->player->ang);
 		wallStripHeight = ((double)TILE_SIZE / perpDistance) * all->dPP;
 		put_1line_rev(all, i, wallStripHeight, angle, hd, 1);
-		// if (0 <= ray_angle && ray_angle < M_PI)
-		// 	put_1line(all, i, wallStripHeight, 0x00FF0000);
-		// else
-		// 	put_1line(all, i, wallStripHeight, 0x0000FF00);
-		// printf("1 %lf\n", hd);
 	}
-	else // case vd
+	else
 	{
-		// printf("vd ");
 		perpDistance = vd * cos(ray_angle - all->player->ang);
 		wallStripHeight = (TILE_SIZE / perpDistance) * all->dPP;
 		put_1line_rev(all, i, wallStripHeight, angle, vd, 2);
-		// if (M_1by2PI <= ray_angle && ray_angle < M_3by2PI)
-		// 	put_1line(all, i, wallStripHeight, 0x000000FF);
-		// else
-		// 	put_1line(all, i, wallStripHeight, 0x00AAFFFF);
 	}
 }
 
@@ -160,23 +149,16 @@ void	img_raycast(t_all *all)
 	put_backview(all, all->map->floor_color, all->map->ceil_color);
 	while (i < WIND_WIDTH)
 	{
-		// printf("ray angle %lf\n", ray_angle);
 		hd = horz_dist(all, ray_angle);
 		vd = vert_dist(all, ray_angle);
 		if (vd < 0)
 			put_1line_case_hd_vd(all, ray_angle, i, 1, hd, vd, ray_angle);
-		// case hd = 1
 		else if (hd < 0)
 			put_1line_case_hd_vd(all, ray_angle, i, 2, hd, vd, ray_angle);
-		// case vd = 2
 		else if (hd <= vd)
 			put_1line_case_hd_vd(all, ray_angle, i, 1, hd, vd, ray_angle);
-		// case hd = 1
 		else
 			put_1line_case_hd_vd(all, ray_angle, i, 2, hd, vd, ray_angle);
-		// case vd = 2
-		// printf("wall height %lf\n", wallStripHeight);
-		// printf("%lf %lf %lf\n", hd, vd, ray_angle * 180 / M_PI);
 		ray_angle -= stp_ang;
 		ray_angle = normalize_rad(ray_angle);
 		i += 1;

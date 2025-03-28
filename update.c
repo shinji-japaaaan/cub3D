@@ -6,25 +6,38 @@
 /*   By: karai <karai@student.42tokyo.jp>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/22 16:46:46 by karai             #+#    #+#             */
-/*   Updated: 2025/03/27 22:54:42 by karai            ###   ########.fr       */
+/*   Updated: 2025/03/29 00:05:43 by karai            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3d.h"
 
-bool	is_WallInside(t_all *all, double x, double y)
+void	move_front(t_player *player, double *newPlayerX, double *newPlayerY)
 {
-	int	idx_x;
-	int	idx_y;
+	*newPlayerX = player->px + cos(player->ang) * player->moveSpeed;
+	*newPlayerY = player->py + sin(player->ang) * -1 * player->moveSpeed;
+}
 
-	idx_x = ceil(x) / TILE_SIZE;
-	idx_y = ceil(y) / TILE_SIZE;
-	if (idx_x < 1 || idx_x > all->map->width - 1 || idx_y < 1
-		|| idx_y > all->map->height - 1)
-		return (true);
-	if (all->map->grid[idx_y][idx_x] == '1')
-		return (true);
-	return (false);
+void	move_back(t_player *player, double *newPlayerX, double *newPlayerY)
+{
+	*newPlayerX = player->px + cos(player->ang) * -1 * player->moveSpeed;
+	*newPlayerY = player->py + sin(player->ang) * player->moveSpeed;
+}
+
+void	move_left(t_player *player, double *newPlayerX, double *newPlayerY)
+{
+	*newPlayerX = player->px + cos(normalize_rad(player->ang + cnv_rad(90)))
+		* player->moveSpeed;
+	*newPlayerY = player->py + sin(normalize_rad(player->ang + cnv_rad(90))) *
+		-1 * player->moveSpeed;
+}
+
+void	move_right(t_player *player, double *newPlayerX, double *newPlayerY)
+{
+	*newPlayerX = player->px + cos(normalize_rad(player->ang + cnv_rad(90))) *
+		-1 * player->moveSpeed;
+	*newPlayerY = player->py + sin(normalize_rad(player->ang + cnv_rad(90)))
+		* player->moveSpeed;
 }
 
 void	update(t_all *all, t_player *player)
@@ -36,29 +49,13 @@ void	update(t_all *all, t_player *player)
 	player->ang += player->turnDirection * player->rotSpeed;
 	player->ang = normalize_rad(player->ang);
 	if (player->walkDirection == MOVE_FRONT)
-	{
-		newPlayerX = player->px + cos(player->ang) * player->moveSpeed;
-		newPlayerY = player->py + sin(player->ang) * -1 * player->moveSpeed;
-	}
+		move_front(player, &newPlayerX, &newPlayerY);
 	else if (player->walkDirection == MOVE_BACK)
-	{
-		newPlayerX = player->px + cos(player->ang) * -1 * player->moveSpeed;
-		newPlayerY = player->py + sin(player->ang) * player->moveSpeed;
-	}
+		move_back(player, &newPlayerX, &newPlayerY);
 	else if (player->walkDirection == MOVE_LEFT)
-	{
-		newPlayerX = player->px + cos(normalize_rad(player->ang + cnv_rad(90)))
-			* player->moveSpeed;
-		newPlayerY = player->py + sin(normalize_rad(player->ang + cnv_rad(90)))
-			* -1 * player->moveSpeed;
-	}
+		move_left(player, &newPlayerX, &newPlayerY);
 	else if (player->walkDirection == MOVE_RIGHT)
-	{
-		newPlayerX = player->px + cos(normalize_rad(player->ang + cnv_rad(90)))
-			* -1 * player->moveSpeed;
-		newPlayerY = player->py + sin(normalize_rad(player->ang + cnv_rad(90)))
-			* player->moveSpeed;
-	}
+		move_right(player, &newPlayerX, &newPlayerY);
 	else
 	{
 		newPlayerX = player->px;

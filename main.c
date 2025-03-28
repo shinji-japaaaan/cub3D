@@ -6,7 +6,7 @@
 /*   By: karai <karai@student.42tokyo.jp>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/20 20:56:01 by karai             #+#    #+#             */
-/*   Updated: 2025/03/27 22:53:08 by karai            ###   ########.fr       */
+/*   Updated: 2025/03/29 00:23:45 by karai            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,7 @@ int	main(void)
 	initialize_window(all);
 	printf("reach\n");
 	mlx_hook(all->mlx_win, 17, 0, map_close, all);
-	mlx_hook(all->mlx_win, X_EVENT_KEY_PRESS, 1L << 0, &ft_key_hook, all);
+	mlx_hook(all->mlx_win, X_EVENT_KEY_PRESS, 1L << 0, &ft_key_press, all);
 	mlx_hook(all->mlx_win, X_EVENT_KEY_RELEASE, (1L << 1), &ft_key_release,
 		all);
 	// mlx_key_hook(all->mlx_win, ft_key_hook, all);

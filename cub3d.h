@@ -6,7 +6,7 @@
 /*   By: karai <karai@student.42tokyo.jp>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/20 11:25:20 by karai             #+#    #+#             */
-/*   Updated: 2025/03/27 23:08:33 by karai            ###   ########.fr       */
+/*   Updated: 2025/03/29 00:32:48 by karai            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,16 +30,16 @@
 # define WIND_WIDTH 640
 # define FOV_ANGLE 60
 # define SCALE 0.8
-# define DT 1
-# define STEP_SPEED 1
-#define STEP_ANGLE 1
+# define DT 0.8
+# define STEP_SPEED 0.5
+# define STEP_ANGLE 0.5
 # define M_PI 3.14159265358979323846
 # define M_2PI 6.28318530717958623199
 # define M_1by2PI 1.57079632679489655799
 # define M_3by2PI 4.71238898038468967399
 
-# define TURN_LEFT -1
-# define TURN_RIGHT 1
+# define TURN_LEFT 1
+# define TURN_RIGHT -1
 # define MOVE_FRONT 1
 # define MOVE_LEFT 2
 # define MOVE_BACK 3
@@ -136,10 +136,6 @@ typedef struct s_all
 void				initialize_window(t_all *all);
 void				my_mlx_pixel_put(t_img *img, int x, int y, int color);
 int					my_mlx_pixel_get(t_xpm *xpm, int x, int y);
-int					map_close(t_all *all);
-int					ft_key_hook(int keycode, t_all *all);
-int					ft_key_release(int keycode, t_all *all);
-int					ft_key_press(int keycode, t_all *all);
 
 // hit_utils.c
 double				cnv_rad(double angle);
@@ -165,7 +161,15 @@ void				init_player(t_player *player);
 void				init_map(t_map *map);
 
 // update.c
-bool				is_WallInside(t_all *all, double x, double y);
+
 void				update(t_all *all, t_player *player);
+
+// update_utils.c
+bool				is_WallInside(t_all *all, double x, double y);
+
+// key_hook.c
+int					map_close(t_all *all);
+int					ft_key_release(int keycode, t_all *all);
+int					ft_key_press(int keycode, t_all *all);
 
 #endif

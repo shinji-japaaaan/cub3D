@@ -13,6 +13,8 @@ SRCS = main.c\
 		img_raycast.c\
 		init.c\
 		update.c\
+		update_utils.c\
+		key_hook.c\
 
 OBJS = $(SRCS:.c=.o)
 
