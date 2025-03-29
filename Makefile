@@ -6,7 +6,7 @@
 #    By: sishizaw <sishizaw@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/03/21 12:07:24 by sishizaw          #+#    #+#              #
-#    Updated: 2025/03/23 13:21:21 by sishizaw         ###   ########.fr        #
+#    Updated: 2025/03/29 09:41:46 by sishizaw         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -24,9 +24,19 @@ LIBFT_FLAGS = -L$(LIBFT_DIR) -lft
 
 SRCS = ./srcs/main.c \
 		./srcs/init.c \
-		./srcs/parse_map.c \
-		./srcs/validate_map.c \
-		./srcs/free.c
+		./srcs/init2.c \
+		./srcs/parse_map1.c \
+		./srcs/parse_map1_2.c \
+		./srcs/parse_map2.c \
+		./srcs/parse_map3.c \
+		./srcs/parse_map4.c \
+		./srcs/parse_map4_2.c \
+		./srcs/free.c \
+		./srcs/check_map_content.c \
+		./srcs/check_map_content2.c \
+		./srcs/check_map_structure.c \
+		./srcs/check_map_structure2.c
+		
 OBJS = $(SRCS:.c=.o)
 
 all: $(LIBFT) $(MLX_LIB) $(NAME)
