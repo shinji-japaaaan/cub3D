@@ -6,7 +6,7 @@
 /*   By: sishizaw <sishizaw@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/21 17:37:27 by sishizaw          #+#    #+#             */
-/*   Updated: 2025/03/29 09:15:52 by sishizaw         ###   ########.fr       */
+/*   Updated: 2025/03/30 12:12:23 by sishizaw         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,17 +21,19 @@ static int	is_valid_position(char c)
 
 static int	is_surrounded(char **map, int x, int y)
 {
-	if (x <= 0 || y <= 0 || !map[y + 1] || !map[y][x + 1])
+	if (x <= 0 || y <= 0 || !map[y + 1] || !map[y][x + 1])//理解できていない
 		return (0);
 	if (map[y - 1][x] == ' ' || map[y + 1][x] == ' ' ||
-		map[y][x - 1] == ' ' || map[y][x + 1] == ' ')
+		map[y][x - 1] == ' ' || map[y][x + 1] == ' ')//空白がないかチェックしているが、ここの要件についてチェックが必要
 		return (0);
 	return (1);
 }
 
 int	check_surroundings(char **map)
 {
-	int i, j;
+	int i;
+	int j;
+	
 	i = 1;
 	while (map[i + 1])
 	{

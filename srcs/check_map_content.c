@@ -6,7 +6,7 @@
 /*   By: sishizaw <sishizaw@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/21 17:37:27 by sishizaw          #+#    #+#             */
-/*   Updated: 2025/03/29 09:14:38 by sishizaw         ###   ########.fr       */
+/*   Updated: 2025/03/30 13:08:48 by sishizaw         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,10 +50,19 @@ static int	check_valid_chars(char **map)
 int	check_map_content(char **map)
 {
 	if (!check_valid_chars(map))
-		return (error("Map contains invalid characters"));
+	{
+		error("Map contains invalid characters");
+		return (0);
+	}
 	if (!check_surroundings(map))
-		return (error("Map contains open spaces"));
+	{
+		error("Map contains open spaces");
+		return (0);
+	}
 	if (!check_player_start_position(map))
-		return (error("No player start position found"));
+	{
+		error("No player start position found");
+		return (0);
+	}
 	return (1);
 }

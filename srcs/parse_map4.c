@@ -6,7 +6,7 @@
 /*   By: sishizaw <sishizaw@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/21 13:36:18 by sishizaw          #+#    #+#             */
-/*   Updated: 2025/03/29 09:40:30 by sishizaw         ###   ########.fr       */
+/*   Updated: 2025/03/29 18:44:47 by sishizaw         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ static char	**parse_map(char **lines, int start, int height)
 	{
 		map[i] = ft_strdup(lines[start + i]);
 		if (!map[i])
-			print_error_and_exit("Error: Memory allocation failed\n");
+			print_error_and_exit("Error: Memory allocation failed\n");//解放する
 		i++;
 	}
 	map[i] = NULL; // NULL 終端
@@ -73,7 +73,7 @@ void	process_lines(char **lines, t_map *map)
 	}
 	map->grid = parse_map(lines, map_start, map_height);
 	map->height = map_height;
-	map->width = ft_strlen(map->grid[0]);
+	map->width = ft_strlen(map->grid[0]); //長方形でない場合、一番外枠の幅をいれる
 }
 
 

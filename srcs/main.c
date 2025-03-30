@@ -6,7 +6,7 @@
 /*   By: sishizaw <sishizaw@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/21 12:10:04 by sishizaw          #+#    #+#             */
-/*   Updated: 2025/03/29 09:32:22 by sishizaw         ###   ########.fr       */
+/*   Updated: 2025/03/29 18:46:56 by sishizaw         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,7 @@ int main(int argc, char **argv)
 
     (void)argc;
     map = init_map();
-    parse_cub_file(argv[1], map);
+    parse_cub_file(argv[1], map);//プレイヤーの位置が二つある場合、エラー
     validate_map(map);
     game = init_game(map);
     start_game(game, map);

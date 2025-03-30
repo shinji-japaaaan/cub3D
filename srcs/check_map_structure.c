@@ -6,30 +6,11 @@
 /*   By: sishizaw <sishizaw@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/21 17:37:27 by sishizaw          #+#    #+#             */
-/*   Updated: 2025/03/28 08:06:25 by sishizaw         ###   ########.fr       */
+/*   Updated: 2025/03/30 13:10:43 by sishizaw         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/cub3d.h"
-
-//マップが長方形かチェック
-static int check_rectangular(char **map)
-{
-    int i;
-    int width;
-
-    if (!map || !map[0])
-        return (0);
-    width = ft_strlen(map[0]);
-    i = 1;
-    while (map[i])
-    {
-        if ((int)ft_strlen(map[i]) != width)
-            return (0);
-        i++;
-    }
-    return (1);
-}
 
 //壁が不規則に配置されている場合をチェック
 static int get_map_dimensions(char **map, int *width, int *height)
@@ -74,8 +55,6 @@ static int check_irregular_walls(char **map)
 // すべてのチェックを統合してマップを検証
 int check_map_structure(char **map)
 {
-    if (!check_rectangular(map))
-        return (error("Map is not rectangular"));
     if (!check_irregular_walls(map))
         return (error("Map contains irregularly placed walls"));
     if (!check_closed_walls(map))
