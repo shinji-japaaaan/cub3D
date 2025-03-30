@@ -6,7 +6,7 @@
 /*   By: karai <karai@student.42tokyo.jp>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/20 11:25:20 by karai             #+#    #+#             */
-/*   Updated: 2025/03/29 00:32:48 by karai            ###   ########.fr       */
+/*   Updated: 2025/03/30 19:47:03 by karai            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,16 +25,15 @@
 
 # define TILE_SIZE 30
 # define IMG_SIZE 640
-# define IMG_SIZE_by2 320
 # define WIND_HEIGHT 480
 # define WIND_WIDTH 640
 # define FOV_ANGLE 60
 # define SCALE 0.8
-# define DT 0.8
+# define DT 50
 # define STEP_SPEED 0.5
 # define STEP_ANGLE 0.5
 # define M_PI 3.14159265358979323846
-# define M_2PI 6.28318530717958623199
+# define M_TWO_PI 6.28318530717958623199
 # define M_1by2PI 1.57079632679489655799
 # define M_3by2PI 4.71238898038468967399
 
@@ -130,6 +129,10 @@ typedef struct s_all
 	t_xpm			xpm_ea[1];
 	long long		last_scan;
 	struct timeval	tv;
+	double			ray_angle;
+	double			wallStripHeight;
+	int				offset;
+	int				stop;
 }					t_all;
 
 // utility_mix.c
@@ -165,7 +168,7 @@ void				init_map(t_map *map);
 void				update(t_all *all, t_player *player);
 
 // update_utils.c
-bool				is_WallInside(t_all *all, double x, double y);
+bool				is_wall_inside(t_all *all, double x, double y);
 
 // key_hook.c
 int					map_close(t_all *all);

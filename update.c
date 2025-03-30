@@ -6,7 +6,7 @@
 /*   By: karai <karai@student.42tokyo.jp>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/22 16:46:46 by karai             #+#    #+#             */
-/*   Updated: 2025/03/29 00:05:43 by karai            ###   ########.fr       */
+/*   Updated: 2025/03/30 19:43:26 by karai            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,7 +61,7 @@ void	update(t_all *all, t_player *player)
 		newPlayerX = player->px;
 		newPlayerY = player->py;
 	}
-	if (!is_WallInside(all, newPlayerX, newPlayerY))
+	if (!is_wall_inside(all, newPlayerX, newPlayerY))
 	{
 		player->px = newPlayerX;
 		player->py = newPlayerY;

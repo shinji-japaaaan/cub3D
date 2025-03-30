@@ -6,16 +6,16 @@
 /*   By: karai <karai@student.42tokyo.jp>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/29 00:05:12 by karai             #+#    #+#             */
-/*   Updated: 2025/03/29 00:05:36 by karai            ###   ########.fr       */
+/*   Updated: 2025/03/30 19:44:12 by karai            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3d.h"
 
-bool	is_WallInside(t_all *all, double x, double y)
+bool	is_wall_inside(t_all *all, double x, double y)
 {
-	int idx_x;
-	int idx_y;
+	int	idx_x;
+	int	idx_y;
 
 	idx_x = floor(x) / TILE_SIZE;
 	idx_y = floor(y) / TILE_SIZE;

@@ -6,7 +6,7 @@
 /*   By: karai <karai@student.42tokyo.jp>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/20 12:19:37 by karai             #+#    #+#             */
-/*   Updated: 2025/03/29 00:13:47 by karai            ###   ########.fr       */
+/*   Updated: 2025/03/30 19:46:59 by karai            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ void	horz_first_hit(t_all all[1], double angle, double AxAy[2],
 	if (0 <= angle && angle < M_PI)
 	{
 		AxAy[1] = (int)all->player->py / TILE_SIZE * TILE_SIZE;
-		AxAy[0] = all->player->px + ((AxAy[1] - all->player->py) / tan(M_2PI
+		AxAy[0] = all->player->px + ((AxAy[1] - all->player->py) / tan(M_TWO_PI
 					- angle));
 		dxdy[0] = TILE_SIZE / tan(angle);
 		dxdy[1] = -TILE_SIZE;
@@ -40,7 +40,7 @@ void	horz_first_hit(t_all all[1], double angle, double AxAy[2],
 	else
 	{
 		AxAy[1] = ((int)all->player->py / TILE_SIZE + 1) * TILE_SIZE;
-		AxAy[0] = all->player->px + ((AxAy[1] - all->player->py) / tan(M_2PI
+		AxAy[0] = all->player->px + ((AxAy[1] - all->player->py) / tan(M_TWO_PI
 					- angle));
 		dxdy[0] = -TILE_SIZE / tan(angle);
 		dxdy[1] = TILE_SIZE;
