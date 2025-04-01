@@ -6,7 +6,7 @@
 /*   By: karai <karai@student.42tokyo.jp>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/30 19:40:19 by karai             #+#    #+#             */
-/*   Updated: 2025/04/01 23:20:19 by karai            ###   ########.fr       */
+/*   Updated: 2025/04/02 00:43:14 by karai            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -106,11 +106,16 @@ void	put_1line_vert(t_all *all, int i, double dist)
 	img_horz_idx = get_img_horz_idx_v(all, dist);
 	j = 0;
 	temp = (double)IMG_SIZE / all->wallStripHeight;
-	if (all->offset > 0)
-		j = all->offset;
+	// if (all->offset > 0)
+	// 	j = ceil(all->offset);
 	while (j < WIND_HEIGHT && j < all->stop)
 	{
-		img_vert_idx = ceil(temp * (j - all->offset));
+		if (j < all->offset)
+		{
+			j += 1;
+			continue;
+		}
+		img_vert_idx = floor(temp * ((double)j - all->offset));
 		if (M_ONETWO_PI <= all->ray_angle && all->ray_angle < M_THREETWO_PI)
 			color = my_mlx_pixel_get(all->xpm_we, IMG_SIZE - 1 - img_horz_idx,
 					img_vert_idx);
@@ -132,11 +137,16 @@ void	put_1line_horz(t_all *all, int i, double dist)
 	img_horz_idx = get_img_horz_idx_h(all, dist);
 	j = 0;
 	temp = (double)IMG_SIZE / all->wallStripHeight;
-	if (all->offset > 0)
-		j = all->offset;
+	// if (all->offset > 0)
+	// 	j = ceil(all->offset);
 	while (j < WIND_HEIGHT && j < all->stop)
 	{
-		img_vert_idx = ceil(temp * (j - all->offset));
+		if (j < all-> offset)
+		{
+			j += 1;
+			continue;
+		}
+		img_vert_idx = floor(temp * ((double)j - all->offset));
 		if (0 <= all->ray_angle && all->ray_angle < M_PI)
 			color = my_mlx_pixel_get(all->xpm_no, img_horz_idx, img_vert_idx);
 		else
@@ -180,8 +190,8 @@ void	put_1line_case_vd(t_all *all, int i, double vd)
 	perp_distance = vd * cos(all->ray_angle - all->player->ang);
 	all->wallStripHeight = (TILE_SIZE / perp_distance) * all->dPP;
 	all->wallStripHeight *= SCALE;
-	all->offset = ceil(((double)WIND_HEIGHT - all->wallStripHeight) / 2);
-	all->stop = ceil(all->wallStripHeight) + all->offset;
+	all->offset = ((double)WIND_HEIGHT - all->wallStripHeight) / 2;
+	all->stop = ceil(all->wallStripHeight + all->offset);
 	put_1line_vert(all, i, vd);
 }
 
@@ -192,8 +202,8 @@ void	put_1line_case_hd(t_all *all, int i, double hd)
 	perp_distance = hd * cos(all->ray_angle - all->player->ang);
 	all->wallStripHeight = ((double)TILE_SIZE / perp_distance) * all->dPP;
 	all->wallStripHeight *= SCALE;
-	all->offset = ceil(((double)WIND_HEIGHT - all->wallStripHeight) / 2);
-	all->stop = ceil(all->wallStripHeight) + all->offset;
+	all->offset = ((double)WIND_HEIGHT - all->wallStripHeight) / 2;
+	all->stop = ceil(all->wallStripHeight + all->offset);
 	put_1line_horz(all, i, hd);
 }
 
@@ -212,8 +222,8 @@ void	put_waltexture(t_all *all, double stp_ang, int i)
 		put_1line_case_hd(all, i, hd);
 	else
 		put_1line_case_vd(all, i, vd);
-	all->ray_angle -= stp_ang;
-	all->ray_angle = normalize_rad(all->ray_angle);
+	// all->ray_angle -= stp_ang;
+	// all->ray_angle = normalize_rad(all->ray_angle);
 }
 
 void	img_raycast(t_all *all)
@@ -221,14 +231,16 @@ void	img_raycast(t_all *all)
 	int		i;
 	double	stp_ang;
 
-	all->ray_angle = all->player->ang + cnv_rad(FOV_ANGLE / 2);
-	all->ray_angle = normalize_rad(all->ray_angle);
-	stp_ang = cnv_rad((double)FOV_ANGLE) / (double)WIND_WIDTH;
+	// all->ray_angle = all->player->ang + cnv_rad(FOV_ANGLE / 2);
+	// all->ray_angle = normalize_rad(all->ray_angle);
+	// stp_ang = cnv_rad((double)FOV_ANGLE) / (double)WIND_WIDTH;
 	i = 0;
 	put_backview(all, all->map->floor_color, all->map->ceil_color);
 	while (i < WIND_WIDTH)
 	{
-		put_waltexture(all, stp_ang, i);
+		all->ray_angle = all->player->ang +atan((i - WIND_WIDTH / 2) / all-> dPP);
+		all->ray_angle = normalize_rad(all->ray_angle);
+		put_waltexture(all, stp_ang, WIND_WIDTH - i - 1);
 		i += 1;
 	}
 	mlx_put_image_to_window(all->mlx, all->mlx_win, all->img.img, 0, 0);

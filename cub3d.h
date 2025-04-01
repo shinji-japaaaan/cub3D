@@ -6,7 +6,7 @@
 /*   By: karai <karai@student.42tokyo.jp>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/20 11:25:20 by karai             #+#    #+#             */
-/*   Updated: 2025/04/01 23:24:29 by karai            ###   ########.fr       */
+/*   Updated: 2025/04/02 00:44:56 by karai            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@
 # define WIND_WIDTH 640
 # define FOV_ANGLE 60
 # define SCALE 0.8
-# define DT 50
+# define DT 30
 # define STEP_SPEED 0.5
 # define STEP_ANGLE 0.5
 # define M_PI 3.14159265358979323846
@@ -127,7 +127,7 @@ typedef struct s_all
 	struct timeval	tv;
 	double			ray_angle;
 	double			wallStripHeight;
-	int				offset;
+	double				offset;
 	int				stop;
 }					t_all;
 
