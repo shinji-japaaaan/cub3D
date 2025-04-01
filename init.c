@@ -6,7 +6,7 @@
 /*   By: karai <karai@student.42tokyo.jp>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/22 15:54:22 by karai             #+#    #+#             */
-/*   Updated: 2025/03/27 22:57:54 by karai            ###   ########.fr       */
+/*   Updated: 2025/04/01 23:23:35 by karai            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,10 +17,10 @@ void	init_player(t_player *player)
 	player->px = 135;
 	player->py = 75;
 	player->ang = cnv_rad(135);
-	player->turnDirection = 0;
-	player->walkDirection = 0;
-	player->moveSpeed = STEP_SPEED;
-	player->rotSpeed = STEP_ANGLE * ((double)M_PI / 180);
+	player->turn_direction = 0;
+	player->walk_direction = 0;
+	player->move_speed = STEP_SPEED;
+	player->rot_speed = STEP_ANGLE * ((double)M_PI / 180);
 }
 
 void	init_map(t_map *map)

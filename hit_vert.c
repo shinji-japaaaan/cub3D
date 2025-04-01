@@ -6,7 +6,7 @@
 /*   By: karai <karai@student.42tokyo.jp>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/20 19:15:48 by karai             #+#    #+#             */
-/*   Updated: 2025/03/28 23:56:46 by karai            ###   ########.fr       */
+/*   Updated: 2025/04/01 23:20:24 by karai            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ void	get_map_vert_idx(double Ax, double Ay, double angle, int hit_ij[2])
 	int	Bx;
 	int	By;
 
-	if (M_1by2PI <= angle && angle < M_3by2PI)
+	if (M_ONETWO_PI <= angle && angle < M_THREETWO_PI)
 		Bx = floor(Ax / TILE_SIZE) - 1;
 	else
 		Bx = floor(Ax / TILE_SIZE);
@@ -29,7 +29,7 @@ void	get_map_vert_idx(double Ax, double Ay, double angle, int hit_ij[2])
 void	vert_first_hit(t_all all[1], double angle, double AxAy[2],
 		double dxdy[2])
 {
-	if (M_1by2PI <= angle && angle < M_3by2PI)
+	if (M_ONETWO_PI <= angle && angle < M_THREETWO_PI)
 	{
 		AxAy[0] = (int)all->player->px / TILE_SIZE * TILE_SIZE;
 		AxAy[1] = all->player->py - ((AxAy[0] - all->player->px) * tan(angle));

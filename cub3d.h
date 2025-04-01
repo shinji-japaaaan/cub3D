@@ -6,7 +6,7 @@
 /*   By: karai <karai@student.42tokyo.jp>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/20 11:25:20 by karai             #+#    #+#             */
-/*   Updated: 2025/03/30 19:47:03 by karai            ###   ########.fr       */
+/*   Updated: 2025/04/01 23:24:29 by karai            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,8 +34,8 @@
 # define STEP_ANGLE 0.5
 # define M_PI 3.14159265358979323846
 # define M_TWO_PI 6.28318530717958623199
-# define M_1by2PI 1.57079632679489655799
-# define M_3by2PI 4.71238898038468967399
+# define M_ONETWO_PI 1.57079632679489655799
+# define M_THREETWO_PI 4.71238898038468967399
 
 # define TURN_LEFT 1
 # define TURN_RIGHT -1
@@ -54,46 +54,42 @@
 
 typedef struct s_map
 {
-	char **grid;     // マップデータ (2D 配列)
-	int width;       // マップの横幅
-	int height;      // マップの縦幅
-	char *tex_no;    // 北向きのテクスチャパス
-	char *tex_so;    // 南向きのテクスチャパス
-	char *tex_we;    // 西向きのテクスチャパス
-	char *tex_ea;    // 東向きのテクスチャパス
-	int floor_color; // 床の色 (RGB)
-	int ceil_color;  // 天井の色 (RGB)
+	char			**grid;
+	int				width;
+	int				height;
+	char			*tex_no;
+	char			*tex_so;
+	char			*tex_we;
+	char			*tex_ea;
+	int				floor_color;
+	int				ceil_color;
 	int				wind_width;
 	int				wind_height;
 }					t_map;
 
 typedef struct s_ray
 {
-	double dir_x;   // レイの向き (x成分)
-	double dir_y;   // レイの向き (y成分)
-	double delta_x; // DDA用のx方向の増分
-	double delta_y; // DDA用のy方向の増分
-	int map_x;      // レイが当たったマップのx座標
-	int map_y;      // レイが当たったマップのy座標
-	int side;       // 0: X壁, 1: Y壁
+	double			dir_x;
+	double			dir_y;
+	double			delta_x;
+	double			delta_y;
+	int				map_x;
+	int				map_y;
+	int				side;
 }					t_ray;
 
 typedef struct s_player
 {
-	double px; // プレイヤーのX座標
-	double py; // プレイヤーのY座標
-	// double dir_x;   // 向きのX成分
-	// double dir_y;   // 向きのY成分
+	double			px;
+	double			py;
+
 	double			ang;
 	bool			facing_right;
 	bool			facing_up;
-	int				turnDirection;
-	int				walkDirection;
-	double			moveSpeed;
-	double			rotSpeed;
-
-	// double plane_x; // カメラ平面X成分
-	// double plane_y; // カメラ平面Y成分
+	int				turn_direction;
+	int				walk_direction;
+	double			move_speed;
+	double			rot_speed;
 }					t_player;
 
 typedef struct s_xpm
