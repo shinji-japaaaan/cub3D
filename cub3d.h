@@ -6,7 +6,7 @@
 /*   By: karai <karai@student.42tokyo.jp>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/20 11:25:20 by karai             #+#    #+#             */
-/*   Updated: 2025/04/02 00:44:56 by karai            ###   ########.fr       */
+/*   Updated: 2025/04/04 00:07:45 by karai            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,10 +23,10 @@
 # include <string.h>
 # include <sys/time.h>
 
-# define TILE_SIZE 30
-# define IMG_SIZE 640
-# define WIND_HEIGHT 480
-# define WIND_WIDTH 640
+# define TILE_SIZE 32
+# define IMG_SIZE 64
+# define WIND_HEIGHT 960
+# define WIND_WIDTH 1280
 # define FOV_ANGLE 60
 # define SCALE 0.8
 # define DT 30
@@ -127,7 +127,7 @@ typedef struct s_all
 	struct timeval	tv;
 	double			ray_angle;
 	double			wallStripHeight;
-	double				offset;
+	double			offset;
 	int				stop;
 }					t_all;
 
@@ -154,6 +154,8 @@ double				vert_dist(t_all all[1], double angle);
 
 // img_raycast.c
 void				img_raycast(t_all *all);
+void				put_backview(t_all *all, int floor_color, int ceil_color);
+void				put_waltexture(t_all *all, int i);
 
 // init.c
 void				init_player(t_player *player);
@@ -170,5 +172,15 @@ bool				is_wall_inside(t_all *all, double x, double y);
 int					map_close(t_all *all);
 int					ft_key_release(int keycode, t_all *all);
 int					ft_key_press(int keycode, t_all *all);
+
+// put_vd.c
+int					get_img_horz_idx_v(t_all *all, double dist);
+void				put_1line_case_vd(t_all *all, int i, double vd);
+void				put_1line_vert(t_all *all, int i, double dist);
+
+// put_hd.c
+int					get_img_horz_idx_h(t_all *all, double dist);
+void				put_1line_case_hd(t_all *all, int i, double hd);
+void				put_1line_horz(t_all *all, int i, double dist);
 
 #endif

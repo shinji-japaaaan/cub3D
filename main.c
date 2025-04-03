@@ -6,7 +6,7 @@
 /*   By: karai <karai@student.42tokyo.jp>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/20 20:56:01 by karai             #+#    #+#             */
-/*   Updated: 2025/03/29 00:23:45 by karai            ###   ########.fr       */
+/*   Updated: 2025/04/04 00:02:44 by karai            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,10 +46,10 @@ int	main(void)
 	all->map->height = 5;
 	all->map->wind_width = all->map->width * TILE_SIZE;
 	all->map->wind_height = all->map->height * TILE_SIZE;
-	all->map->tex_no = "./textures/north.xpm";
-	all->map->tex_so = "./textures/south.xpm";
-	all->map->tex_ea = "./textures/east.xpm";
-	all->map->tex_we = "./textures/west.xpm";
+	all->map->tex_no = "./textures/koto_north.xpm";
+	all->map->tex_so = "./textures/koto_south.xpm";
+	all->map->tex_ea = "./textures/koto_east.xpm";
+	all->map->tex_we = "./textures/koto_west.xpm";
 	all->dPP = (double)(WIND_WIDTH / 2) / tan(cnv_rad(FOV_ANGLE / 2));
 	printf("px py %lf %lf\n", all->player->px, all->player->py);
 	initialize_window(all);

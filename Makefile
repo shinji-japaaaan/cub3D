@@ -15,6 +15,8 @@ SRCS = main.c\
 		update.c\
 		update_utils.c\
 		key_hook.c\
+		put_hd.c\
+		put_vd.c\
 
 OBJS = $(SRCS:.c=.o)
 
