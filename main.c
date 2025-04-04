@@ -6,7 +6,7 @@
 /*   By: karai <karai@student.42tokyo.jp>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/20 20:56:01 by karai             #+#    #+#             */
-/*   Updated: 2025/04/04 23:38:48 by karai            ###   ########.fr       */
+/*   Updated: 2025/04/04 23:40:55 by karai            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,7 @@ int	main(void)
 	all->map->tex_so = "./textures/koto_south.xpm";
 	all->map->tex_ea = "./textures/koto_east.xpm";
 	all->map->tex_we = "./textures/koto_west.xpm";
-	all->dPP = (double)(WIND_WIDTH / 2) / tan(cnv_rad(FOV_ANGLE / 2));
+	all->dpp = (double)(WIND_WIDTH / 2) / tan(cnv_rad(FOV_ANGLE / 2));
 	printf("px py %lf %lf\n", all->player->px, all->player->py);
 	initialize_window(all);
 	mlx_hook(all->mlx_win, 17, 0, map_close, all);

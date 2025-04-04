@@ -6,7 +6,7 @@
 /*   By: karai <karai@student.42tokyo.jp>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/20 11:25:20 by karai             #+#    #+#             */
-/*   Updated: 2025/04/04 23:22:30 by karai            ###   ########.fr       */
+/*   Updated: 2025/04/04 23:43:01 by karai            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -118,7 +118,7 @@ typedef struct s_all
 	t_img			img;
 	void			*mlx;
 	void			*mlx_win;
-	double			dPP;
+	double			dpp;
 	t_xpm			xpm_no[1];
 	t_xpm			xpm_so[1];
 	t_xpm			xpm_we[1];
@@ -126,7 +126,7 @@ typedef struct s_all
 	long long		last_scan;
 	struct timeval	tv;
 	double			ray_angle;
-	double			wallStripHeight;
+	double			wall_strip_height;
 	double			offset;
 	int				stop;
 }					t_all;

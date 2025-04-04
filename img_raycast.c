@@ -6,7 +6,7 @@
 /*   By: karai <karai@student.42tokyo.jp>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/30 19:40:19 by karai             #+#    #+#             */
-/*   Updated: 2025/04/03 23:31:58 by karai            ###   ########.fr       */
+/*   Updated: 2025/04/04 23:40:27 by karai            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,7 +64,7 @@ void	img_raycast(t_all *all)
 	while (i < WIND_WIDTH)
 	{
 		all->ray_angle = all->player->ang + atan((i - WIND_WIDTH / 2)
-				/ all->dPP);
+				/ all->dpp);
 		all->ray_angle = normalize_rad(all->ray_angle);
 		put_waltexture(all, WIND_WIDTH - i - 1);
 		i += 1;

@@ -6,7 +6,7 @@
 /*   By: karai <karai@student.42tokyo.jp>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/02 22:50:15 by karai             #+#    #+#             */
-/*   Updated: 2025/04/02 22:54:53 by karai            ###   ########.fr       */
+/*   Updated: 2025/04/04 23:42:57 by karai            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,10 +29,10 @@ void	put_1line_case_vd(t_all *all, int i, double vd)
 	int		img_horz_idx;
 
 	perp_distance = vd * cos(all->ray_angle - all->player->ang);
-	all->wallStripHeight = (TILE_SIZE / perp_distance) * all->dPP;
-	all->wallStripHeight *= SCALE;
-	all->offset = ((double)WIND_HEIGHT - all->wallStripHeight) / 2;
-	all->stop = ceil(all->wallStripHeight + all->offset);
+	all->wall_strip_height = (TILE_SIZE / perp_distance) * all->dpp;
+	all->wall_strip_height *= SCALE;
+	all->offset = ((double)WIND_HEIGHT - all->wall_strip_height) / 2;
+	all->stop = ceil(all->wall_strip_height + all->offset);
 	put_1line_vert(all, i, vd);
 }
 
@@ -46,13 +46,13 @@ void	put_1line_vert(t_all *all, int i, double dist)
 
 	img_horz_idx = get_img_horz_idx_v(all, dist);
 	j = 0;
-	temp = (double)IMG_SIZE / all->wallStripHeight;
+	temp = (double)IMG_SIZE / all->wall_strip_height;
 	while (j < WIND_HEIGHT && j < all->stop)
 	{
 		if (j < all->offset)
 		{
 			j += 1;
-			continue;
+			continue ;
 		}
 		img_vert_idx = floor(temp * ((double)j - all->offset));
 		if (M_ONETWO_PI <= all->ray_angle && all->ray_angle < M_THREETWO_PI)

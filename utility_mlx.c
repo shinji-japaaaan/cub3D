@@ -6,7 +6,7 @@
 /*   By: karai <karai@student.42tokyo.jp>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/20 11:38:35 by karai             #+#    #+#             */
-/*   Updated: 2025/04/04 22:59:00 by karai            ###   ########.fr       */
+/*   Updated: 2025/04/04 23:47:45 by karai            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ void	get_xpm(t_all *all, t_xpm *xpm, char *tex_path)
 			&(xpm->endian));
 }
 
-void initialize_all(t_all *all)
+void	initialize_all(t_all *all)
 {
 	all->mlx = NULL;
 	all->mlx_win = NULL;
