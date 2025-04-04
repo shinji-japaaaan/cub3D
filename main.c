@@ -6,7 +6,7 @@
 /*   By: karai <karai@student.42tokyo.jp>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/20 20:56:01 by karai             #+#    #+#             */
-/*   Updated: 2025/04/04 00:02:44 by karai            ###   ########.fr       */
+/*   Updated: 2025/04/04 23:38:48 by karai            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,7 @@ int	main(void)
 	t_all	all[1];
 	char	*grid[] = {"1111111", "1010011", "1000001", "1000011", "1111111"};
 
+	initialize_all(all);
 	all->map->grid = (char **)malloc(sizeof(char *) * 6);
 	for (int i = 0; i < 5; i++)
 	{
@@ -53,13 +54,10 @@ int	main(void)
 	all->dPP = (double)(WIND_WIDTH / 2) / tan(cnv_rad(FOV_ANGLE / 2));
 	printf("px py %lf %lf\n", all->player->px, all->player->py);
 	initialize_window(all);
-	printf("reach\n");
 	mlx_hook(all->mlx_win, 17, 0, map_close, all);
 	mlx_hook(all->mlx_win, X_EVENT_KEY_PRESS, 1L << 0, &ft_key_press, all);
 	mlx_hook(all->mlx_win, X_EVENT_KEY_RELEASE, (1L << 1), &ft_key_release,
 		all);
-	// mlx_key_hook(all->mlx_win, ft_key_hook, all);
-	// img_raycast(all);
 	mlx_loop_hook(all->mlx, (void *)loop_function, all);
 	mlx_loop(all->mlx);
 }

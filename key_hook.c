@@ -6,7 +6,7 @@
 /*   By: karai <karai@student.42tokyo.jp>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/29 00:31:09 by karai             #+#    #+#             */
-/*   Updated: 2025/04/01 23:26:28 by karai            ###   ########.fr       */
+/*   Updated: 2025/04/04 23:23:34 by karai            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,14 +14,17 @@
 
 int	map_close(t_all *all)
 {
-	// free_all(all); to be implemeted
+	destroy_all(all);
 	exit(0);
 }
 
 int	ft_key_press(int keycode, t_all *all)
 {
 	if (keycode == ESCAPE)
+	{
+		destroy_all(all);
 		exit(0);
+	}
 	if (keycode == 'w')
 		all->player->walk_direction = MOVE_FRONT;
 	if (keycode == 'd')

@@ -6,7 +6,7 @@
 /*   By: karai <karai@student.42tokyo.jp>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/20 11:25:20 by karai             #+#    #+#             */
-/*   Updated: 2025/04/04 00:07:45 by karai            ###   ########.fr       */
+/*   Updated: 2025/04/04 23:22:30 by karai            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -133,6 +133,7 @@ typedef struct s_all
 
 // utility_mix.c
 void				initialize_window(t_all *all);
+void				initialize_all(t_all *all);
 void				my_mlx_pixel_put(t_img *img, int x, int y, int color);
 int					my_mlx_pixel_get(t_xpm *xpm, int x, int y);
 
@@ -182,5 +183,8 @@ void				put_1line_vert(t_all *all, int i, double dist);
 int					get_img_horz_idx_h(t_all *all, double dist);
 void				put_1line_case_hd(t_all *all, int i, double hd);
 void				put_1line_horz(t_all *all, int i, double dist);
+
+// destroy_all.c
+void				destroy_all(t_all *all);
 
 #endif

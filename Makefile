@@ -17,6 +17,7 @@ SRCS = main.c\
 		key_hook.c\
 		put_hd.c\
 		put_vd.c\
+		destroy_all.c\
 
 OBJS = $(SRCS:.c=.o)
 
