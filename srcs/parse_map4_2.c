@@ -6,7 +6,7 @@
 /*   By: sishizaw <sishizaw@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/21 13:36:18 by sishizaw          #+#    #+#             */
-/*   Updated: 2025/03/29 09:41:13 by sishizaw         ###   ########.fr       */
+/*   Updated: 2025/04/05 10:34:10 by sishizaw         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,23 +62,52 @@ static int	parse_color(char *line)
 	return (r << 16 | g << 8 | b);
 }
 
-static char	*parse_texture(char *line)
+static char *parse_texture(char *line)
 {
-	char	*texture_path;
-	int i; // "NO", "SO", "WE", "EA" の後ろからスタート
+    char *texture_path;
+    int i = 2;
+    int fd;
 
-    i = 2;
-	// 空白をスキップ
-	while (line[i] == ' ')
-		i++;
-	// テクスチャパスが空でないかチェック
-	if (line[i] == '\0')
-		print_error_and_exit("Error: Missing texture path\n");
-	// テクスチャパスをコピー
-	texture_path = ft_strdup(&line[i]);
-	if (!texture_path)
-		print_error_and_exit("Error: Memory allocation failed for texture path\n");
-	return (texture_path);
+    // 空白文字をスキップ
+    while (line[i] == ' ')
+        i++;
+
+    // テクスチャパスが空でないかを確認
+    if (line[i] == '\0')
+    {
+        perror("Error: Missing texture path");
+        exit(1);
+    }
+
+    // テクスチャパスのコピー
+    texture_path = strdup(&line[i]);
+    if (!texture_path)
+    {
+        perror("Error: Memory allocation failed for texture path");
+        exit(1);
+    }
+
+    // ファイル拡張子のチェック
+    if (strncmp(&texture_path[strlen(texture_path) - 4], ".xpm", 4) != 0)
+    {
+        free(texture_path);
+        perror("Error: Invalid texture file format (expected .xpm)");
+        exit(1);
+    }
+
+    // open関数でファイルを開く（読み取り専用）
+    fd = open(texture_path, O_RDONLY);
+    if (fd == -1)  // ファイルが存在しない場合
+    {
+        free(texture_path);
+        perror("Error: Texture file does not exist");
+        exit(1);
+    }
+
+    // ファイルが開けた場合は閉じる
+    close(fd);
+
+    return texture_path;
 }
 
 void	process_texture_lines(char *line, t_map *map)

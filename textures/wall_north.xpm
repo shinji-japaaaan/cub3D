@@ -1,0 +1,27 @@
+/* XPM */
+static char *wall_texture[] = {
+/* width height num_colors chars_per_pixel */
+"16 16 4 1",
+/* colors */
+"a c #FF0000",  /* 赤 */
+"b c #00FF00",  /* 緑 */
+"c c #0000FF",  /* 青 */
+"d c #FFFFFF",  /* 白 */
+/* pixels */
+"aaaaaaaaaaaaaaaa",
+"abbbbbbbbbbbbba",
+"accccccccccccba",
+"addddddddddddba",
+"addddddddddddba",
+"accccccccccccba",
+"abbbbbbbbbbbbba",
+"aaaaaaaaaaaaaaaa",
+"aaaaaaaaaaaaaaaa",
+"abbbbbbbbbbbbba",
+"accccccccccccba",
+"addddddddddddba",
+"addddddddddddba",
+"accccccccccccba",
+"abbbbbbbbbbbbba",
+"aaaaaaaaaaaaaaaa"
+};
