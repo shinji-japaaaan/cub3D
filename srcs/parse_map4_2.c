@@ -6,7 +6,7 @@
 /*   By: sishizaw <sishizaw@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/21 13:36:18 by sishizaw          #+#    #+#             */
-/*   Updated: 2025/04/05 10:34:10 by sishizaw         ###   ########.fr       */
+/*   Updated: 2025/04/05 18:08:24 by sishizaw         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,42 +25,63 @@ static void	check_color_range(int value)
 		exit(printf("Error: RGB values out of range\n"));
 }
 
+static int	is_digit_str(char *str)
+{
+	int i = 0;
+	if (!str || !*str)
+		return (0);
+	while (str[i] && str[i] != ',' && str[i] != ' ')
+	{
+		if (!ft_isdigit(str[i]))
+			return (0);
+		i++;
+	}
+	return (1);
+}
+
 static int	parse_color_value(char *line, int *i)
 {
-	int	value;
+	char	buffer[4]; // RGBは最大3桁＋null終端
+	int		len;
 
-	value = ft_atoi(&line[*i]);
-	while (line[*i] && line[*i] != ',')
+	while (line[*i] == ' ')
 		(*i)++;
-	return (value);
+	len = 0;
+	while (ft_isdigit(line[*i]) && len < 3)
+		buffer[len++] = line[(*i)++];
+	buffer[len] = '\0';
+	if (!is_digit_str(buffer))
+		exit(printf("Error: Invalid RGB format\n"));
+	return (ft_atoi(buffer));
 }
 
 static int	parse_color(char *line)
 {
-	int i; // "F" または "C" の次の文字から開始
-	int r;
-    int g;
-    int b;
+	int	i = 1;
+	int	r, g, b;
 
-    i = 1;
-	// 空白をスキップ
 	while (line[i] == ' ')
 		i++;
-	// 赤色値の取得
 	r = parse_color_value(line, &i);
+	while (line[i] == ' ') i++;
 	check_comma(line, &i);
-	// 緑色値の取得
+	while (line[i] == ' ') i++;
 	g = parse_color_value(line, &i);
+	while (line[i] == ' ') i++;
 	check_comma(line, &i);
-	// 青色値の取得
+	while (line[i] == ' ') i++;
 	b = parse_color_value(line, &i);
-	// RGB値の範囲チェック
 	check_color_range(r);
 	check_color_range(g);
 	check_color_range(b);
-	// RGBを16進数に変換して返す
-	return (r << 16 | g << 8 | b);
+	// 残りにゴミがあればエラー
+	while (line[i] == ' ')
+		i++;
+	if (line[i] != '\0')
+		exit(printf("Error: Too many RGB values\n"));
+	return ((r << 16) | (g << 8) | b);
 }
+
 
 static char *parse_texture(char *line)
 {
