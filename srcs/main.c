@@ -6,7 +6,7 @@
 /*   By: sishizaw <sishizaw@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/21 12:10:04 by sishizaw          #+#    #+#             */
-/*   Updated: 2025/03/29 18:46:56 by sishizaw         ###   ########.fr       */
+/*   Updated: 2025/04/05 10:12:11 by sishizaw         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,12 +30,12 @@ static void	parse_cub_file(const char *filename, t_map *map)
 
 static int validate_map(t_map *map)
 {
-    if (!check_map_structure(map->grid))
+    if (!check_map_structure(map))
     {
         free_all(map);
         exit_with_error("Invalid map format");
     }
-    else if (!check_map_content(map->grid))
+    else if (!check_map_content(map))
     {
         free_all(map);
         exit_with_error("Invalid map format");
@@ -48,7 +48,10 @@ int main(int argc, char **argv)
     t_map *map;
     t_game *game;
 
-    (void)argc;
+    if (argc != 2) {
+        printf("Error: You must provide exactly two .cub files.\n");
+        exit(1);
+    }
     map = init_map();
     parse_cub_file(argv[1], map);//プレイヤーの位置が二つある場合、エラー
     validate_map(map);

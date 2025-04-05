@@ -6,7 +6,7 @@
 #    By: sishizaw <sishizaw@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/03/21 12:07:24 by sishizaw          #+#    #+#              #
-#    Updated: 2025/03/29 09:41:46 by sishizaw         ###   ########.fr        #
+#    Updated: 2025/03/31 20:48:36 by sishizaw         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -33,9 +33,7 @@ SRCS = ./srcs/main.c \
 		./srcs/parse_map4_2.c \
 		./srcs/free.c \
 		./srcs/check_map_content.c \
-		./srcs/check_map_content2.c \
 		./srcs/check_map_structure.c \
-		./srcs/check_map_structure2.c
 		
 OBJS = $(SRCS:.c=.o)
 

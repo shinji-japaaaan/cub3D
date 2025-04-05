@@ -6,7 +6,7 @@
 /*   By: sishizaw <sishizaw@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/20 11:25:20 by karai             #+#    #+#             */
-/*   Updated: 2025/03/29 09:45:49 by sishizaw         ###   ########.fr       */
+/*   Updated: 2025/03/30 19:00:46 by sishizaw         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,15 +69,11 @@ void		print_error_and_exit(char *message);
 void		process_texture_lines(char *line, t_map *map);
 
 //check_map_content.c
-int			check_map_content(char **map);
-int			check_surroundings(char **map);
-int			check_player_start_position(char **map);
+int	check_map_content(t_map *map);
 int			error(char *msg);
 
 //check_map_structure.c
-int			check_map_structure(char **map);
-int			check_closed_walls(char **map);
-int			check_incomplete_outer_wall(char **map);
+int			check_map_structure(t_map *map);
 
 //free.c
 void		free_all(t_map *map);

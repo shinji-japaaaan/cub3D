@@ -6,7 +6,7 @@
 /*   By: sishizaw <sishizaw@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/21 13:36:18 by sishizaw          #+#    #+#             */
-/*   Updated: 2025/03/29 18:44:47 by sishizaw         ###   ########.fr       */
+/*   Updated: 2025/03/31 20:31:57 by sishizaw         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,25 +18,51 @@ void	print_error_and_exit(char *message)
 	exit(EXIT_FAILURE);
 }
 
-static char	**parse_map(char **lines, int start, int height)
+static void	free_map(char **map, int size)
+{
+	int	i;
+
+	i = 0;
+	while (i < size)
+	{
+		free(map[i]);
+		i++;
+	}
+	free(map);
+}
+
+static char	**parse_map(char **lines, int start, int height, int *map_width)
 {
 	char	**map;
 	int		i;
+    int	max_width = 0;
+    int line_length;
 
 	// メモリ確保
 	map = (char **)malloc(sizeof(char *) * (height + 1));
 	if (!map)
+	{
+		free_lines(lines);
 		print_error_and_exit("Error: Memory allocation failed\n");
+	}
 	i = 0;
 	// マップをコピー
 	while (i < height)
 	{
 		map[i] = ft_strdup(lines[start + i]);
 		if (!map[i])
-			print_error_and_exit("Error: Memory allocation failed\n");//解放する
+		{
+			free_lines(lines);
+			free_map(map, i);
+			print_error_and_exit("Error: Memory allocation failed\n");
+		}
+		line_length = ft_strlen(map[i]);
+        if (line_length > max_width)
+            max_width = line_length;	
 		i++;
 	}
 	map[i] = NULL; // NULL 終端
+	*map_width = max_width;  // 最大の幅を更新
 	return (map);
 }
 
@@ -61,6 +87,7 @@ void	process_lines(char **lines, t_map *map)
 	int i;
 	int map_start;
 	int map_height;
+	int map_width = 0;
 
 	i = 0;
 	map_start = 0;
@@ -71,9 +98,9 @@ void	process_lines(char **lines, t_map *map)
 		process_map_lines(lines[i], i, &map_start, &map_height);
 		i++;
 	}
-	map->grid = parse_map(lines, map_start, map_height);
+	map->grid = parse_map(lines, map_start, map_height, &map_width);
 	map->height = map_height;
-	map->width = ft_strlen(map->grid[0]); //長方形でない場合、一番外枠の幅をいれる
+	map->width = map_width;// 最大の幅を設定
 }
 
 

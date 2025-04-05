@@ -6,61 +6,48 @@
 /*   By: sishizaw <sishizaw@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/21 17:37:27 by sishizaw          #+#    #+#             */
-/*   Updated: 2025/03/30 13:10:43 by sishizaw         ###   ########.fr       */
+/*   Updated: 2025/03/31 21:07:45 by sishizaw         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/cub3d.h"
 
-//壁が不規則に配置されている場合をチェック
-static int get_map_dimensions(char **map, int *width, int *height)
+//マップが壁（1）に囲まれているかチェック
+static int check_closed_walls(t_map *map)
 {
-    *height = 0;
-    while (map[*height]) // マップの高さを取得
-        (*height)++;
-    *width = ft_strlen(map[0]); // マップの幅を取得
-    return 0;
-}
+    int i;
+    int j;
+    int width;
+    int height;
+    char **grid;
 
-static int is_irregular_wall(int i, int j, char **map)
-{
-    if (map[i][j] == '1') {
-        if (map[i - 1][j] != '1' && map[i + 1][j] != '1' &&
-            map[i][j - 1] != '1' && map[i][j + 1] != '1')
-            return (1); // 壁が隣接していない場合は不規則
+    width = map->width;
+    height = map->height;
+    grid = map->grid;
+    // 上下の壁チェック
+    j = 0;
+    while (j < width)
+    {
+        if (grid[0][j] != '1' || grid[height - 1][j] != '1')
+            return (0);
+        j++;
     }
-    return 0;
-}
-
-static int check_irregular_walls(char **map)
-{
-    int i, j;
-    int width, height;
-
-    get_map_dimensions(map, &width, &height);
-
-    i = 1;
-    while (i < height - 1) {
-        j = 1;
-        while (j < width - 1) {
-            if (is_irregular_wall(i, j, map))
-                return (0);  // 壁が不規則
-            j++;
-        }
+    // 左右の壁チェック
+    i = 0;
+    while (i < height)
+    {
+        if (grid[i][0] != '1' || grid[i][width - 1] != '1')
+            return (0);
         i++;
     }
     return (1);
 }
 
 // すべてのチェックを統合してマップを検証
-int check_map_structure(char **map)
+int check_map_structure(t_map *map)
 {
-    if (!check_irregular_walls(map))
-        return (error("Map contains irregularly placed walls"));
     if (!check_closed_walls(map))
         return (error("Map is not surrounded by walls"));
-    if (!check_incomplete_outer_wall(map))
-        return (error("Map contains incomplete outer wall"));
     return (1);
 }
 
