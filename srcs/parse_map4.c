@@ -6,7 +6,7 @@
 /*   By: sishizaw <sishizaw@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/21 13:36:18 by sishizaw          #+#    #+#             */
-/*   Updated: 2025/03/31 20:31:57 by sishizaw         ###   ########.fr       */
+/*   Updated: 2025/04/07 05:42:35 by sishizaw         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,12 +31,10 @@ static void	free_map(char **map, int size)
 	free(map);
 }
 
-static char	**parse_map(char **lines, int start, int height, int *map_width)
+static char	**parse_map(char **lines, int start, int height)
 {
 	char	**map;
 	int		i;
-    int	max_width = 0;
-    int line_length;
 
 	// メモリ確保
 	map = (char **)malloc(sizeof(char *) * (height + 1));
@@ -56,51 +54,126 @@ static char	**parse_map(char **lines, int start, int height, int *map_width)
 			free_map(map, i);
 			print_error_and_exit("Error: Memory allocation failed\n");
 		}
-		line_length = ft_strlen(map[i]);
-        if (line_length > max_width)
-            max_width = line_length;	
 		i++;
 	}
 	map[i] = NULL; // NULL 終端
-	*map_width = max_width;  // 最大の幅を更新
 	return (map);
 }
 
-static void	process_map_lines(char *line, int i, int *map_start,
-		int *map_height)
+char *ft_strnew(size_t size)
 {
-	if (strncmp(line, "NO ", 3) == 0 || strncmp(line, "SO ", 3) == 0 ||
-		strncmp(line, "WE ", 3) == 0 || strncmp(line, "EA ", 3) == 0 ||
-		line[0] == 'F' || line[0] == 'C' || line[0] == '\0')
-		return ; // テクスチャや色設定の行は無視
-	if (line[0] == '1' || line[0] == '0' || line[0] == 'N' ||
-		line[0] == 'S' || line[0] == 'E' || line[0] == 'W')
+    char *str;
+
+    // size + 1 のサイズを確保 (終端文字 '\0' を含めるため)
+    str = (char *)malloc(sizeof(char) * (size + 1));
+    if (str == NULL)
+    {
+        return NULL;  // メモリ確保に失敗した場合は NULL を返す
+    }
+
+    // 文字列のすべての文字を空白で埋める
+    ft_memset(str, ' ', size);
+
+    // 最後に終端文字 '\0' を追加
+    str[size] = '\0';
+
+    return str;
+}
+
+// マップの各行の幅を最大幅に合わせてスペースを埋める
+static void	fill_map_with_spaces(char **map, int map_height, int max_width)
+{
+	int i;
+	int current_length;
+
+	i = 0;
+	while (i < map_height)
 	{
-		if (*map_start == 0) // 初回のみ記録
-			*map_start = i;
-		(*map_height)++;
+		current_length = ft_strlen(map[i]);
+		if (current_length < max_width)
+		{
+			// 末尾にスペースを埋める
+			map[i] = ft_strjoin(map[i], ft_strnew(max_width - current_length));
+		}
+		i++;
 	}
+}
+
+// 最大幅を決定する関数
+static int	get_max_line_width(char **lines)
+{
+	int i;
+	int max_width = 0;
+	int line_length;
+
+	i = 0;
+	while (lines[i])
+	{
+		line_length = ft_strlen(lines[i]);
+		if (line_length > max_width)
+			max_width = line_length;
+		i++;
+	}
+	return (max_width);
+}
+
+int find_map_start_index(char **lines)
+{
+	int i = 0;
+
+	while (lines[i])
+	{
+		char *line = lines[i];
+
+		// 行頭の空白をスキップ
+		while (*line == ' ' || *line == '\t')
+			line++;
+
+		// 空行はスキップ
+		if (*line == '\0')
+		{
+			i++;
+			continue;
+		}
+
+		// 設定行でなければ、それ以降はマップ
+		if (!(strncmp(line, "NO ", 3) == 0 || strncmp(line, "SO ", 3) == 0 ||
+			  strncmp(line, "WE ", 3) == 0 || strncmp(line, "EA ", 3) == 0 ||
+			  line[0] == 'F' || line[0] == 'C'))
+			break;
+		i++;
+	}
+	return i;
 }
 
 void	process_lines(char **lines, t_map *map)
 {
-	int i;
-	int map_start;
-	int map_height;
-	int map_width = 0;
+	int map_start = find_map_start_index(lines);
+	int map_height = 0;
+	int i = map_start;
 
-	i = 0;
-	map_start = 0;
-	map_height = 0;
+	// map_height を数える
 	while (lines[i])
 	{
-		process_texture_lines(lines[i], map);
-		process_map_lines(lines[i], i, &map_start, &map_height);
+		if (lines[i][0] != '\0') // 空行スキップ
+			map_height++;
 		i++;
 	}
-	map->grid = parse_map(lines, map_start, map_height, &map_width);
+
+	map->grid = parse_map(lines, map_start, map_height);
+
+	// map_width は全体で取得（空行も含める可能性あるので別関数の方が安全）
+	int map_width = get_max_line_width(&lines[map_start]);
+
+	fill_map_with_spaces(map->grid, map_height, map_width);
+
 	map->height = map_height;
-	map->width = map_width;// 最大の幅を設定
+	map->width = map_width;
+
+	// 設定情報だけ処理するループ（マップ以前の行だけ）
+	for (int j = 0; j < map_start; j++)
+		process_texture_lines(lines[j], map);
 }
+
 
 

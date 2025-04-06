@@ -6,7 +6,7 @@
 /*   By: sishizaw <sishizaw@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/20 11:25:20 by karai             #+#    #+#             */
-/*   Updated: 2025/03/30 19:00:46 by sishizaw         ###   ########.fr       */
+/*   Updated: 2025/04/06 18:44:27 by sishizaw         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,10 @@ typedef struct s_game
 {
 	void	*mlx;
 	void	*win;
-	void	*img;
+	void	*tex_no_img;
+	void	*tex_so_img;
+	void	*tex_ea_img;
+	void	*tex_we_img;
 	t_map	*map;
 	int		img_width;
 	int		img_height;

@@ -6,7 +6,7 @@
 /*   By: sishizaw <sishizaw@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/21 13:39:29 by sishizaw          #+#    #+#             */
-/*   Updated: 2025/03/28 20:56:54 by sishizaw         ###   ########.fr       */
+/*   Updated: 2025/04/06 18:27:45 by sishizaw         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,13 +30,14 @@ t_map *init_map(void)
 
 t_game *init_game(t_map *map)
 {
-    t_game *game;
+	t_game *game;
 
-    game = malloc(sizeof(t_game));
-    if (!game)
-    {
-        free_all(map);
-        exit_with_error("malloc failed");
-    }
-    return (game);
+	game = malloc(sizeof(t_game));
+	if (!game)
+	{
+		free_all(map);
+		exit_with_error("malloc failed");
+	}
+	ft_memset(game, 0, sizeof(t_game)); // ここで全フィールドをゼロ初期化
+	return (game);
 }

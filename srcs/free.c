@@ -6,7 +6,7 @@
 /*   By: sishizaw <sishizaw@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/23 11:03:55 by sishizaw          #+#    #+#             */
-/*   Updated: 2025/03/29 09:16:28 by sishizaw         ###   ########.fr       */
+/*   Updated: 2025/04/06 18:51:58 by sishizaw         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,11 +50,17 @@ void	cleanup_and_exit(t_game *game, int exit_code)
 {
 	if (game)
 	{
-		if (game->img)
-			mlx_destroy_image(game->mlx, game->img);
+		if (game->tex_no_img)
+			mlx_destroy_image(game->mlx, game->tex_no_img);
+		if (game->tex_so_img)
+			mlx_destroy_image(game->mlx, game->tex_so_img);
+		if (game->tex_ea_img)
+			mlx_destroy_image(game->mlx, game->tex_ea_img);
+		if (game->tex_we_img)
+			mlx_destroy_image(game->mlx, game->tex_we_img);
 		if (game->win)
 			mlx_destroy_window(game->mlx, game->win);
-		if (game->mlx) // Linuxでは X11 のリソースを解放
+		if (game->mlx)
 		{
 			mlx_destroy_display(game->mlx);
 			free(game->mlx);
@@ -63,6 +69,7 @@ void	cleanup_and_exit(t_game *game, int exit_code)
 	}
 	exit(exit_code);
 }
+
 
 void	free_lines(char **lines)
 {

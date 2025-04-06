@@ -6,7 +6,7 @@
 /*   By: sishizaw <sishizaw@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/21 13:39:29 by sishizaw          #+#    #+#             */
-/*   Updated: 2025/03/28 21:21:27 by sishizaw         ###   ########.fr       */
+/*   Updated: 2025/04/06 18:46:23 by sishizaw         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,19 +47,37 @@ static void *init_window(t_game *game)
     return (win);
 }
 
-static void *init_texture(t_game *game)
+void *load_texture(t_game *game, char *path)
 {
     void *img;
 
-    img = mlx_xpm_file_to_image(game->mlx, TEXTURE_PATH, 
+    img = mlx_xpm_file_to_image(game->mlx, path,
         &game->img_width, &game->img_height);
     if (!img)
     {
         perror("Failed to load texture");
-        free_all(game->map);
-        cleanup_and_exit(game, EXIT_FAILURE);
+        return NULL;
     }
     return (img);
+}
+
+void init_textures(t_game *game)
+{
+    game->tex_no_img = load_texture(game, game->map->tex_no);
+    if (!game->tex_no_img)
+        printf("Failed to load north texture\n");
+
+    game->tex_so_img = load_texture(game, game->map->tex_so);
+    if (!game->tex_so_img)
+        printf("Failed to load south texture\n");
+
+    game->tex_we_img = load_texture(game, game->map->tex_we);
+    if (!game->tex_we_img)
+        printf("Failed to load west texture\n");
+
+    game->tex_ea_img = load_texture(game, game->map->tex_ea);
+    if (!game->tex_ea_img)
+        printf("Failed to load east texture\n");
 }
 
 void start_game(t_game *game, t_map *map)
@@ -68,8 +86,20 @@ void start_game(t_game *game, t_map *map)
     game->mlx = init_mlx(game);
     game->win = init_window(game);
     mlx_clear_window(game->mlx, game->win);
-    game->img = init_texture(game);
-    mlx_put_image_to_window(game->mlx, game->win, game->img, 100, 100);
+    init_textures(game);
+    // 各画像を別の位置に表示（X, Y 座標を調整）
+    if (game->tex_no_img)
+        mlx_put_image_to_window(game->mlx, game->win,
+        game->tex_no_img, 0, 0);
+    if (game->tex_so_img)
+        mlx_put_image_to_window(game->mlx, game->win,
+        game->tex_so_img, 200, 0);
+    if (game->tex_we_img)    
+        mlx_put_image_to_window(game->mlx, game->win,
+        game->tex_we_img, 0, 200);
+    if (game->tex_ea_img)
+    mlx_put_image_to_window(game->mlx, game->win,
+        game->tex_ea_img, 200, 200);
     mlx_key_hook(game->win, key_hook, game);
     mlx_loop(game->mlx);
 }
