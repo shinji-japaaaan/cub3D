@@ -6,7 +6,7 @@
 /*   By: sishizaw <sishizaw@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/21 13:36:18 by sishizaw          #+#    #+#             */
-/*   Updated: 2025/04/05 18:08:24 by sishizaw         ###   ########.fr       */
+/*   Updated: 2025/04/07 21:14:00 by sishizaw         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,9 @@ static void	check_color_range(int value)
 
 static int	is_digit_str(char *str)
 {
-	int i = 0;
+	int	i;
+
+	i = 0;
 	if (!str || !*str)
 		return (0);
 	while (str[i] && str[i] != ',' && str[i] != ' ')
@@ -41,9 +43,9 @@ static int	is_digit_str(char *str)
 
 static int	parse_color_value(char *line, int *i)
 {
-	char	buffer[4]; // RGBは最大3桁＋null終端
-	int		len;
+	int	len;
 
+	char buffer[4]; // RGBは最大3桁＋null終端
 	while (line[*i] == ' ')
 		(*i)++;
 	len = 0;
@@ -57,19 +59,24 @@ static int	parse_color_value(char *line, int *i)
 
 static int	parse_color(char *line)
 {
-	int	i = 1;
-	int	r, g, b;
+	int	i;
 
+	i = 1;
+	int r, g, b;
 	while (line[i] == ' ')
 		i++;
 	r = parse_color_value(line, &i);
-	while (line[i] == ' ') i++;
+	while (line[i] == ' ')
+		i++;
 	check_comma(line, &i);
-	while (line[i] == ' ') i++;
+	while (line[i] == ' ')
+		i++;
 	g = parse_color_value(line, &i);
-	while (line[i] == ' ') i++;
+	while (line[i] == ' ')
+		i++;
 	check_comma(line, &i);
-	while (line[i] == ' ') i++;
+	while (line[i] == ' ')
+		i++;
 	b = parse_color_value(line, &i);
 	check_color_range(r);
 	check_color_range(g);
@@ -82,53 +89,47 @@ static int	parse_color(char *line)
 	return ((r << 16) | (g << 8) | b);
 }
 
-
-static char *parse_texture(char *line)
+static char	*parse_texture(char *line)
 {
-    char *texture_path;
-    int i = 2;
-    int fd;
+	char	*texture_path;
+	int		i;
+	int		fd;
 
-    // 空白文字をスキップ
-    while (line[i] == ' ')
-        i++;
-
-    // テクスチャパスが空でないかを確認
-    if (line[i] == '\0')
-    {
-        perror("Error: Missing texture path");
-        exit(1);
-    }
-
-    // テクスチャパスのコピー
-    texture_path = strdup(&line[i]);
-    if (!texture_path)
-    {
-        perror("Error: Memory allocation failed for texture path");
-        exit(1);
-    }
-
-    // ファイル拡張子のチェック
-    if (strncmp(&texture_path[strlen(texture_path) - 4], ".xpm", 4) != 0)
-    {
-        free(texture_path);
-        perror("Error: Invalid texture file format (expected .xpm)");
-        exit(1);
-    }
-
-    // open関数でファイルを開く（読み取り専用）
-    fd = open(texture_path, O_RDONLY);
-    if (fd == -1)  // ファイルが存在しない場合
-    {
-        free(texture_path);
-        perror("Error: Texture file does not exist");
-        exit(1);
-    }
-
-    // ファイルが開けた場合は閉じる
-    close(fd);
-
-    return texture_path;
+	i = 2;
+	// 空白文字をスキップ
+	while (line[i] == ' ')
+		i++;
+	// テクスチャパスが空でないかを確認
+	if (line[i] == '\0')
+	{
+		perror("Error: Missing texture path");
+		exit(1);
+	}
+	// テクスチャパスのコピー
+	texture_path = strdup(&line[i]);
+	if (!texture_path)
+	{
+		perror("Error: Memory allocation failed for texture path");
+		exit(1);
+	}
+	// ファイル拡張子のチェック
+	if (strncmp(&texture_path[strlen(texture_path) - 4], ".xpm", 4) != 0)
+	{
+		free(texture_path);
+		perror("Error: Invalid texture file format (expected .xpm)");
+		exit(1);
+	}
+	// open関数でファイルを開く（読み取り専用）
+	fd = open(texture_path, O_RDONLY);
+	if (fd == -1) // ファイルが存在しない場合
+	{
+		free(texture_path);
+		perror("Error: Texture file does not exist");
+		exit(1);
+	}
+	// ファイルが開けた場合は閉じる
+	close(fd);
+	return (texture_path);
 }
 
 void	process_texture_lines(char *line, t_map *map)

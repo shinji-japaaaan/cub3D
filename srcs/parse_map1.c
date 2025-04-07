@@ -6,28 +6,29 @@
 /*   By: sishizaw <sishizaw@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/21 13:36:18 by sishizaw          #+#    #+#             */
-/*   Updated: 2025/03/29 09:43:56 by sishizaw         ###   ########.fr       */
+/*   Updated: 2025/04/07 21:13:20 by sishizaw         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/cub3d.h"
 
-static int open_file(const char *filename)
+static int	open_file(const char *filename)
 {
-    if (!filename || ft_strlen(filename) < 4 || ft_strcmp(filename
-			+ ft_strlen(filename) - 4, ".cub") != 0)
-    {
-        printf("Error: Invalid file format (expected .cub file)\n");
-        exit(EXIT_FAILURE);
-    }
+	int	fd;
 
-    int fd = open(filename, O_RDONLY);
-    if (fd == -1)
-    {
-        perror("Error opening file");
-        exit(EXIT_FAILURE);
-    }
-    return (fd);
+	if (!filename || ft_strlen(filename) < 4 || ft_strcmp(filename
+			+ ft_strlen(filename) - 4, ".cub") != 0)
+	{
+		printf("Error: Invalid file format (expected .cub file)\n");
+		exit(EXIT_FAILURE);
+	}
+	fd = open(filename, O_RDONLY);
+	if (fd == -1)
+	{
+		perror("Error opening file");
+		exit(EXIT_FAILURE);
+	}
+	return (fd);
 }
 
 static void	copy_data(void **src, void **dst, int size)

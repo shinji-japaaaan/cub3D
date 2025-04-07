@@ -6,13 +6,11 @@
 /*   By: sishizaw <sishizaw@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/21 17:37:27 by sishizaw          #+#    #+#             */
-/*   Updated: 2025/04/06 20:26:48 by sishizaw         ###   ########.fr       */
+/*   Updated: 2025/04/07 06:27:42 by sishizaw         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/cub3d.h"
-
-#include <stdio.h>
 
 // 外側の壁チェック（1以外の文字が外側にある）
 static int check_outer_wall(t_map *map)
