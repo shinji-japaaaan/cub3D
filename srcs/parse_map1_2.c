@@ -1,28 +1,70 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   parse_map3.c                                       :+:      :+:    :+:   */
+/*   parse_map1_2.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: sishizaw <sishizaw@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/21 13:36:18 by sishizaw          #+#    #+#             */
-/*   Updated: 2025/03/29 09:21:20 by sishizaw         ###   ########.fr       */
+/*   Updated: 2025/04/11 22:11:50 by sishizaw         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/cub3d.h"
 
-static char	*allocate_buffer(void)
+static void	copy_data(void **src, void **dst, int size)
 {
-	char	*buffer;
+	int	i;
 
-	buffer = malloc(BUFFER_SIZE);
-	if (!buffer)
-		perror("Error: Memory allocation failed for buffer");
-	return (buffer);
+	i = 0;
+	while (i < size)
+	{
+		dst[i] = src[i];
+		i++;
+	}
 }
 
-static int	read_chars(int fd, char *buffer)
+static void	**custom_realloc(void **ptr, int old_size, int new_size)
+{
+	void	**new_ptr;
+
+	new_ptr = (void **)malloc(sizeof(void *) * new_size);
+	if (!new_ptr)
+		return (NULL);
+	copy_data(ptr, new_ptr, old_size);
+	free(ptr);
+	return (new_ptr);
+}
+
+static char	**resize_lines(char **lines, int *capacity)
+{
+	int		new_capacity;
+	char	**new_lines;
+
+	new_capacity = (*capacity) * 2;
+	new_lines = (char **)custom_realloc((void **)lines, *capacity,
+			new_capacity);
+	if (new_lines)
+		*capacity = new_capacity;
+	return (new_lines);
+}
+
+char	**handle_resize(char **lines, int *cap, char *line, int fd)
+{
+	char	**new_lines;
+
+	new_lines = resize_lines(lines, cap);
+	if (!new_lines)
+	{
+		free(line);
+		free_lines(lines);
+		close(fd);
+		return (NULL);
+	}
+	return (new_lines);
+}
+
+int	read_chars(int fd, char *buffer)
 {
 	int	bytes_read;
 	int	i;
@@ -40,26 +82,4 @@ static int	read_chars(int fd, char *buffer)
 			break ;
 	}
 	return (bytes_read);
-}
-
-char	*read_line(int fd)
-{
-	char	*buffer;
-	int		status;
-
-	buffer = allocate_buffer();
-	if (!buffer)
-		return (NULL);
-	status = read_chars(fd, buffer);
-	if (status == -1)
-	{
-		free(buffer);
-		return (NULL);
-	}
-	if (status == 0)
-	{
-		free(buffer);
-		return (NULL);
-	}
-	return (buffer);
 }

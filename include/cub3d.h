@@ -6,7 +6,7 @@
 /*   By: sishizaw <sishizaw@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/20 11:25:20 by karai             #+#    #+#             */
-/*   Updated: 2025/04/06 18:44:27 by sishizaw         ###   ########.fr       */
+/*   Updated: 2025/04/12 07:22:35 by sishizaw         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,32 +55,57 @@ typedef struct s_game
 	int		img_height;
 }			t_game;
 
+typedef struct s_flags
+{
+	int		has_no;
+	int		has_so;
+	int		has_we;
+	int		has_ea;
+	int		has_floor;
+	int		has_ceiling;
+	int		has_map;
+	int		has_config;
+	int		error_flag;
+}			t_flags;
+
 //init.c
+char		**init_lines(int *capacity);
 t_map		*init_map(void);
 t_game		*init_game(t_map *map);
+void		init_flags(t_flags *f);
 void		start_game(t_game *game, t_map *map);
-void		cleanup_and_exit(t_game *game, int exit_code);
 
 //parse_map.c
 char		**read_lines(const char *filename);
-char		*read_line(int fd);
-void		handle_file_read_error(void);
-void		handle_invalid_cub_format(void);
+int			read_chars(int fd, char *buffer);
+char		**handle_resize(char **lines, int *cap, char *line, int fd);
 int			validate_cub_format(char **lines);
 void		process_lines(char **lines, t_map *map);
+char		**parse_map(char **lines, int start, int height);
+void		fill_map_with_spaces(char **map, int map_height, int max_width);
+void		process_textures(char **lines, int map_start, t_map *map);
+char		*parse_texture(char *line);
+int			parse_color(char *line);
+int			parse_color_value(char *line, int *i);
+void		check_color_range(int value);
+
+void		set_flag(int *flag, int *error);
 void		print_error_and_exit(char *message);
-void		process_texture_lines(char *line, t_map *map);
+void		print_perror_and_exit(char *message);
+void		cleanup_and_exit(t_game *game, int exit_code);
+int			error(char *msg);
 
 //check_map_content.c
-int	check_map_content(t_map *map);
-int			error(char *msg);
+int			check_map_content(t_map *map);
 
 //check_map_structure.c
 int			check_map_structure(t_map *map);
+int			check_outer_wall(t_map *map);
 
 //free.c
 void		free_all(t_map *map);
 void		exit_with_error(char *msg);
 void		free_lines(char **lines);
+void		free_map(char **map, int size);
 
 #endif

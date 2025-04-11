@@ -6,7 +6,7 @@
 /*   By: sishizaw <sishizaw@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/21 13:39:29 by sishizaw          #+#    #+#             */
-/*   Updated: 2025/04/06 18:46:23 by sishizaw         ###   ########.fr       */
+/*   Updated: 2025/04/12 07:20:05 by sishizaw         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 static int key_hook(int keycode, t_game *game)
 {
-    if (keycode == 65307) // ESCキーで終了
+    if (keycode == 65307)
         cleanup_and_exit(game, EXIT_SUCCESS);
     return (0);
 }
@@ -87,7 +87,6 @@ void start_game(t_game *game, t_map *map)
     game->win = init_window(game);
     mlx_clear_window(game->mlx, game->win);
     init_textures(game);
-    // 各画像を別の位置に表示（X, Y 座標を調整）
     if (game->tex_no_img)
         mlx_put_image_to_window(game->mlx, game->win,
         game->tex_no_img, 0, 0);

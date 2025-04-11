@@ -6,21 +6,12 @@
 /*   By: sishizaw <sishizaw@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/21 17:37:27 by sishizaw          #+#    #+#             */
-/*   Updated: 2025/03/30 19:01:11 by sishizaw         ###   ########.fr       */
+/*   Updated: 2025/04/11 22:51:44 by sishizaw         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/cub3d.h"
 
-int	error(char *msg)
-{
-	write(2, "Error\n", 6);
-	write(2, msg, ft_strlen(msg));
-	write(2, "\n", 1);
-	return (0);
-}
-
-//不正な文字が含まれていないかチェック
 static int	is_valid_char(char c)
 {
 	return (c == '0' || c == '1' || c == 'N' || c == 'S' ||
@@ -47,7 +38,6 @@ static int	check_valid_chars(char **map)
 	return (1);
 }
 
-//プレイヤー位置が存在するかチェック
 static int	is_player_char(char c)
 {
 	return (c == 'N' || c == 'S' || c == 'E' || c == 'W');
