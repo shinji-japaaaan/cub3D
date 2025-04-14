@@ -6,7 +6,7 @@
 /*   By: sishizaw <sishizaw@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/21 17:37:27 by sishizaw          #+#    #+#             */
-/*   Updated: 2025/04/12 07:20:59 by sishizaw         ###   ########.fr       */
+/*   Updated: 2025/04/14 19:26:45 by sishizaw         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,27 +61,11 @@ static int	check_adjacent_non_wall(t_map *map)
 	return (1);
 }
 
-// マップの中身を出力する関数
-static void	print_map(t_map *map)
-{
-	int		i;
-	int		height;
-	char	**grid;
 
-	height = map->height;
-	grid = map->grid;
-	printf("Map contents:\n");
-	for (i = 0; i < height; i++)
-	{
-		printf("%s\n", grid[i]);
-	}
-	printf("\n");
-}
 
 int	check_map_structure(t_map *map)
 {
-	// マップの内容を出力
-	print_map(map);
+	
 	if (!check_outer_wall(map))
 		return (error("Map has invalid characters at the outer walls"));
 	if (!check_adjacent_non_wall(map))

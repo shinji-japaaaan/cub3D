@@ -6,7 +6,7 @@
 /*   By: sishizaw <sishizaw@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/20 11:25:20 by karai             #+#    #+#             */
-/*   Updated: 2025/04/12 07:22:35 by sishizaw         ###   ########.fr       */
+/*   Updated: 2025/04/14 20:41:16 by sishizaw         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,8 @@
 # define WIN_WIDTH 800
 # define WIN_HEIGHT 800
 # define TEXTURE_PATH "./textures/wall_texture.xpm"
+# define MAX_MAP_HEIGHT 100
+# define MAX_MAP_WIDTH  100
 
 typedef struct s_map
 {
@@ -107,5 +109,7 @@ void		free_all(t_map *map);
 void		exit_with_error(char *msg);
 void		free_lines(char **lines);
 void		free_map(char **map, int size);
+
+void	print_map(t_map *map);
 
 #endif

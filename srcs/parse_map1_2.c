@@ -6,7 +6,7 @@
 /*   By: sishizaw <sishizaw@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/21 13:36:18 by sishizaw          #+#    #+#             */
-/*   Updated: 2025/04/11 22:11:50 by sishizaw         ###   ########.fr       */
+/*   Updated: 2025/04/14 20:07:44 by sishizaw         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,6 +80,11 @@ int	read_chars(int fd, char *buffer)
 		i++;
 		if (i >= BUFFER_SIZE - 1)
 			break ;
+	}
+	if (i > 0)
+	{
+		buffer[i] = '\0';  // 最後の行が \n で終わらない場合でも行として扱う
+		return (1);
 	}
 	return (bytes_read);
 }
