@@ -6,7 +6,7 @@
 /*   By: sishizaw <sishizaw@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/20 11:25:20 by karai             #+#    #+#             */
-/*   Updated: 2025/04/17 13:51:42 by sishizaw         ###   ########.fr       */
+/*   Updated: 2025/04/17 16:04:27 by sishizaw         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,7 +85,7 @@ int			validate_cub_format(char **lines);
 
 //parse_map4.c
 void		process_lines(char **lines, t_map *map);
-int			fill_map_with_spaces(char **map, int map_height, int max_width);
+int			fill_map_with_spaces(char **grid, int map_height, int max_width);
 void		parse_config_lines(char **lines, int map_start, t_map *map);
 int			parse_texture_safe(char *line, char **out_path);
 int			parse_color_safe(char *line, int *out_color);
