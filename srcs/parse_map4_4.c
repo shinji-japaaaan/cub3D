@@ -6,51 +6,44 @@
 /*   By: sishizaw <sishizaw@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/21 13:36:18 by sishizaw          #+#    #+#             */
-/*   Updated: 2025/04/12 07:06:14 by sishizaw         ###   ########.fr       */
+/*   Updated: 2025/04/17 13:38:57 by sishizaw         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/cub3d.h"
 
-static void	validate_texture_path(char *path)
+static int	handle_config_line(char *line, t_map *map)
 {
-	int	len;
-
-	len = ft_strlen(path);
-	if (len < 4 || ft_strncmp(&path[len - 4], ".xpm", 4) != 0)
-	{
-		free(path);
-		print_error_and_exit("Error: Invalid texture file format (expected .xpm)");
-	}
+	if (ft_strncmp(line, "NO ", 3) == 0)
+		return parse_texture_safe(line, &map->tex_no);
+	else if (ft_strncmp(line, "SO ", 3) == 0)
+		return parse_texture_safe(line, &map->tex_so);
+	else if (ft_strncmp(line, "WE ", 3) == 0)
+		return parse_texture_safe(line, &map->tex_we);
+	else if (ft_strncmp(line, "EA ", 3) == 0)
+		return parse_texture_safe(line, &map->tex_ea);
+	else if (line[0] == 'F')
+		return parse_color_safe(line, &map->floor_color);
+	else if (line[0] == 'C')
+		return parse_color_safe(line, &map->ceil_color);
+	return 0;
 }
 
-static void	validate_texture_file(char *path)
+void	parse_config_lines(char **lines, int map_start, t_map *map)
 {
-	int	fd;
+	int	j;
+	int	status;
 
-	fd = open(path, O_RDONLY);
-	if (fd == -1)
+	j = 0;
+	while (j < map_start)
 	{
-		free(path);
-		print_perror_and_exit("Error: Texture file does not exist");
+		status = handle_config_line(lines[j], map);
+		if (status == -1)
+		{
+			free_lines(lines);
+			free_all(map);
+			exit(EXIT_FAILURE);
+		}
+		j++;
 	}
-	close(fd);
-}
-
-char	*parse_texture(char *line)
-{
-	char	*texture_path;
-	int		i;
-
-	i = 2;
-	while (line[i] == ' ')
-		i++;
-	if (line[i] == '\0')
-		print_error_and_exit("Error: Missing texture path");
-	texture_path = ft_strdup(&line[i]);
-	if (!texture_path)
-		print_perror_and_exit("Error: Missing texture path");
-	validate_texture_path(texture_path);
-	validate_texture_file(texture_path);
-	return (texture_path);
 }

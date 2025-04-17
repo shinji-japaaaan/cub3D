@@ -6,7 +6,7 @@
 /*   By: sishizaw <sishizaw@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/20 11:25:20 by karai             #+#    #+#             */
-/*   Updated: 2025/04/14 20:41:16 by sishizaw         ###   ########.fr       */
+/*   Updated: 2025/04/17 13:51:42 by sishizaw         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@
 # define WIN_HEIGHT 800
 # define TEXTURE_PATH "./textures/wall_texture.xpm"
 # define MAX_MAP_HEIGHT 100
-# define MAX_MAP_WIDTH  100
+# define MAX_MAP_WIDTH 100
 
 typedef struct s_map
 {
@@ -82,14 +82,21 @@ char		**read_lines(const char *filename);
 int			read_chars(int fd, char *buffer);
 char		**handle_resize(char **lines, int *cap, char *line, int fd);
 int			validate_cub_format(char **lines);
+
+//parse_map4.c
 void		process_lines(char **lines, t_map *map);
-char		**parse_map(char **lines, int start, int height);
-void		fill_map_with_spaces(char **map, int map_height, int max_width);
-void		process_textures(char **lines, int map_start, t_map *map);
-char		*parse_texture(char *line);
-int			parse_color(char *line);
+int			fill_map_with_spaces(char **map, int map_height, int max_width);
+void		parse_config_lines(char **lines, int map_start, t_map *map);
+int			parse_texture_safe(char *line, char **out_path);
+int			parse_color_safe(char *line, int *out_color);
+int			find_map_start_index(char **lines);
+void		get_max_line_width(char **lines, int *width);
+int			check_color_range(int value);
+void		count_map_height(char **lines, int start, int *height);
+void		check_map_height(char **lines, int height);
+void		check_map_width(char **lines, int width);
+int			check_comma(char *line, int *i);
 int			parse_color_value(char *line, int *i);
-void		check_color_range(int value);
 
 void		set_flag(int *flag, int *error);
 void		print_error_and_exit(char *message);
@@ -110,6 +117,6 @@ void		exit_with_error(char *msg);
 void		free_lines(char **lines);
 void		free_map(char **map, int size);
 
-void	print_map(t_map *map);
+void		print_map(t_map *map);
 
 #endif

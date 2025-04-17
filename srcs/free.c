@@ -6,7 +6,7 @@
 /*   By: sishizaw <sishizaw@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/23 11:03:55 by sishizaw          #+#    #+#             */
-/*   Updated: 2025/04/11 22:41:04 by sishizaw         ###   ########.fr       */
+/*   Updated: 2025/04/17 13:58:37 by sishizaw         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,9 +38,6 @@ void	free_all(t_map *map)
 	free(map);
 }
 
-
-
-
 void	free_lines(char **lines)
 {
 	int	i;
@@ -62,4 +59,28 @@ void	free_map(char **map, int size)
 		i++;
 	}
 	free(map);
+}
+
+void	cleanup_and_exit(t_game *game, int exit_code)
+{
+	if (game)
+	{
+		if (game->tex_no_img)
+			mlx_destroy_image(game->mlx, game->tex_no_img);
+		if (game->tex_so_img)
+			mlx_destroy_image(game->mlx, game->tex_so_img);
+		if (game->tex_ea_img)
+			mlx_destroy_image(game->mlx, game->tex_ea_img);
+		if (game->tex_we_img)
+			mlx_destroy_image(game->mlx, game->tex_we_img);
+		if (game->win)
+			mlx_destroy_window(game->mlx, game->win);
+		if (game->mlx)
+		{
+			mlx_destroy_display(game->mlx);
+			free(game->mlx);
+		}
+		free(game);
+	}
+	exit(exit_code);
 }

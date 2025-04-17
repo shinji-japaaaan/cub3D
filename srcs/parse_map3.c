@@ -6,7 +6,7 @@
 /*   By: sishizaw <sishizaw@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/21 13:36:18 by sishizaw          #+#    #+#             */
-/*   Updated: 2025/04/12 06:56:17 by sishizaw         ###   ########.fr       */
+/*   Updated: 2025/04/17 13:58:55 by sishizaw         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ static void	check_colors(char *line, t_flags *f)
 		set_flag(&f->has_ceiling, &f->error_flag);
 }
 
-static int	check_map(char *line)//mapの重複はどのように検知するか
+static int	check_map(char *line)
 {
 	int	has_wall;
 

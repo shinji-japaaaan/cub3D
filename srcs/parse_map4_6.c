@@ -6,46 +6,68 @@
 /*   By: sishizaw <sishizaw@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/21 13:36:18 by sishizaw          #+#    #+#             */
-/*   Updated: 2025/04/12 07:10:19 by sishizaw         ###   ########.fr       */
+/*   Updated: 2025/04/17 13:40:20 by sishizaw         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/cub3d.h"
 
-static int	is_digit_str(char *str)
+static void	skip_spaces(char *line, int *i)
 {
-	int	i;
+	while (line[*i] == ' ')
+		(*i)++;
+}
 
-	i = 0;
-	if (!str || !*str)
-		return (0);
-	while (str[i] && str[i] != ',' && str[i] != ' ')
+static int	validate_trailing_chars(char *line, int i)
+{
+	skip_spaces(line, &i);
+	if (line[i] != '\0')
 	{
-		if (!ft_isdigit(str[i]))
-			return (0);
-		i++;
+		printf("Error: Too many RGB values\n");
+		return (0);
 	}
 	return (1);
 }
 
-int	parse_color_value(char *line, int *i)
+static int	get_next_color(char *line, int *i, int need_comma)
 {
-	int		len;
-	char	buffer[4];
+	int	value;
 
-	while (line[*i] == ' ')
-		(*i)++;
-	len = 0;
-	while (ft_isdigit(line[*i]) && len < 3)
-		buffer[len++] = line[(*i)++];
-	buffer[len] = '\0';
-	if (!is_digit_str(buffer))
-		print_error_and_exit("Error: Invalid RGB format\n");
-	return (ft_atoi(buffer));
+	skip_spaces(line, i);
+	if (need_comma && !check_comma(line, i))
+		return (-1);
+	skip_spaces(line, i);
+	value = parse_color_value(line, i);
+	return (value);
 }
 
-void	check_color_range(int value)
+static int	parse_color(char *line)
 {
-	if (value < 0 || value > 255)
-		print_error_and_exit("Error: RGB values out of range\n");
+	int	i;
+	int	r;
+	int	g;
+	int	b;
+
+	i = 1;
+	r = get_next_color(line, &i, 0);
+	g = get_next_color(line, &i, 1);
+	b = get_next_color(line, &i, 1);
+	if (r == -1 || g == -1 || b == -1)
+		return (-1);
+	if (!check_color_range(r) || !check_color_range(g) || !check_color_range(b))
+		return (-1);
+	if (!validate_trailing_chars(line, i))
+		return (-1);
+	return ((r << 16) | (g << 8) | b);
+}
+
+int	parse_color_safe(char *line, int *out_color)
+{
+	int	color;
+
+	color = parse_color(line);
+	if (color == -1)
+		return (-1);
+	*out_color = color;
+	return (0);
 }

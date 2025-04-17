@@ -6,53 +6,61 @@
 /*   By: sishizaw <sishizaw@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/21 13:36:18 by sishizaw          #+#    #+#             */
-/*   Updated: 2025/04/11 22:40:48 by sishizaw         ###   ########.fr       */
+/*   Updated: 2025/04/17 13:38:21 by sishizaw         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/cub3d.h"
 
-static char        **alloc_map(int height)
+static char	*ft_strnew(size_t size)
 {
-        char        **map;
+	char	*str;
 
-        map = (char **)malloc(sizeof(char *) * (height + 1));
-        if (!map)
-                return (NULL);
-        map[height] = NULL;
-        return (map);
+	str = (char *)malloc(sizeof(char) * (size + 1));
+	if (str == NULL)
+	{
+		return (NULL);
+	}
+	ft_memset(str, ' ', size);
+	str[size] = '\0';
+	return (str);
 }
 
-static void        copy_map_lines(char **dst, char **src, int start, int height)
+static char	*fill_line_with_spaces(char *line, int max_width)
 {
-        int        i;
+	int		current_length;
+	char	*spaces;
+	char	*new_line;
 
-        i = 0;
-        while (i < height)
-        {
-                dst[i] = ft_strdup(src[start + i]);
-                if (!dst[i])
-                        break ;
-                i++;
-        }
-        if (i != height)
-        {
-                free_lines(src);
-                free_map(dst, i);
-                print_error_and_exit("Error: Memory allocation failed\n");
-        }
+	current_length = ft_strlen(line);
+	if (current_length >= max_width)
+		return (line);
+	spaces = ft_strnew(max_width - current_length);
+	if (!spaces)
+		return (NULL);
+	new_line = ft_strjoin(line, spaces);
+	free(spaces);
+	if (!new_line)
+		return (NULL);
+	free(line);
+	return (new_line);
 }
 
-char        **parse_map(char **lines, int start, int height)
+int	fill_map_with_spaces(char **map, int map_height, int max_width)
 {
-        char        **map;
+	int		i;
+	char	*new_line;
 
-        map = alloc_map(height);
-        if (!map)
-        {
-                free_lines(lines);
-                print_error_and_exit("Error: Memory allocation failed\n");
-        }
-        copy_map_lines(map, lines, start, height);
-        return (map);
+	i = 0;
+	while (i < map_height)
+	{
+		new_line = fill_line_with_spaces(map[i], max_width);
+		if (!new_line)
+			return (0);
+		map[i] = new_line;
+		i++;
+	}
+	return (1);
 }
+
+

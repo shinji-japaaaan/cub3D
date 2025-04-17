@@ -6,58 +6,84 @@
 /*   By: sishizaw <sishizaw@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/21 13:36:18 by sishizaw          #+#    #+#             */
-/*   Updated: 2025/04/12 07:11:02 by sishizaw         ###   ########.fr       */
+/*   Updated: 2025/04/17 13:39:44 by sishizaw         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/cub3d.h"
 
-static void	check_comma(char *line, int *i)
+static int	is_valid_texture_extension(char *path)
 {
-	if (line[*i] != ',')
-		print_error_and_exit("Error: Invalid color format\n");
-	(*i)++;
+	int	len;
+
+	len = ft_strlen(path);
+	if (len < 4)
+		return (0);
+	if (ft_strncmp(&path[len - 4], ".xpm", 4) != 0)
+		return (0);
+	return (1);
 }
 
-static void	skip_spaces(char *line, int *i)
+static int	can_open_file(char *path)
 {
-	while (line[*i] == ' ')
-		(*i)++;
+	int	fd;
+
+	fd = open(path, O_RDONLY);
+	if (fd == -1)
+		return (0);
+	close(fd);
+	return (1);
 }
 
-static void	validate_trailing_chars(char *line, int i)
+static int	extract_texture_path(char *line, char **out_path)
 {
-	skip_spaces(line, &i);
-	if (line[i] != '\0')
-		print_error_and_exit("Error: Too many RGB values\n");
+	char	*texture_path;
+	int		i;
+
+	i = 2;
+	while (line[i] == ' ')
+		i++;
+	if (line[i] == '\0')
+	{
+		printf("Error: Missing texture path");
+		return (-1);
+	}
+	texture_path = ft_strdup(&line[i]);
+	if (!texture_path)
+	{
+		perror("Error: ft_strdup failed");
+		return (-1);
+	}
+	*out_path = texture_path;
+	return (0);
 }
 
-static int	get_next_color(char *line, int *i, int need_comma)
+static int	validate_texture_all(char *path)
 {
-	int	value;
-
-	skip_spaces(line, i);
-	if (need_comma)
-		check_comma(line, i);
-	skip_spaces(line, i);
-	value = parse_color_value(line, i);
-	return (value);
+	if (!is_valid_texture_extension(path))
+	{
+		printf("Error: Invalid texture file format (expected .xpm)");
+		free(path);
+		return (-1);
+	}
+	if (!can_open_file(path))
+	{
+		perror("Error: Texture file does not exist");
+		free(path);
+		return (-1);
+	}
+	return (0);
 }
 
-int	parse_color(char *line)
+int	parse_texture_safe(char *line, char **out_path)
 {
-	int	i;
-	int	r;
-	int	g;
-	int	b;
+	char	*path;
 
-	i = 1;
-	r = get_next_color(line, &i, 0);
-	g = get_next_color(line, &i, 1);
-	b = get_next_color(line, &i, 1);
-	check_color_range(r);
-	check_color_range(g);
-	check_color_range(b);
-	validate_trailing_chars(line, i);
-	return ((r << 16) | (g << 8) | b);
+	if (extract_texture_path(line, &path) == -1)
+		return (-1);
+	if (validate_texture_all(path) == -1)
+		return (-1);
+	*out_path = path;
+	return (0);
 }
+
