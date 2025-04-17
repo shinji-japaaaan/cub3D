@@ -6,7 +6,7 @@
 /*   By: sishizaw <sishizaw@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/21 13:36:18 by sishizaw          #+#    #+#             */
-/*   Updated: 2025/04/17 13:38:21 by sishizaw         ###   ########.fr       */
+/*   Updated: 2025/04/17 16:08:36 by sishizaw         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,7 @@ static char	*fill_line_with_spaces(char *line, int max_width)
 	return (new_line);
 }
 
-int	fill_map_with_spaces(char **map, int map_height, int max_width)
+int	fill_map_with_spaces(char **grid, int map_height, int max_width)
 {
 	int		i;
 	char	*new_line;
@@ -54,10 +54,10 @@ int	fill_map_with_spaces(char **map, int map_height, int max_width)
 	i = 0;
 	while (i < map_height)
 	{
-		new_line = fill_line_with_spaces(map[i], max_width);
+		new_line = fill_line_with_spaces(grid[i], max_width);
 		if (!new_line)
 			return (0);
-		map[i] = new_line;
+		grid[i] = new_line;
 		i++;
 	}
 	return (1);
