@@ -6,7 +6,7 @@
 /*   By: karai <karai@student.42tokyo.jp>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/20 11:25:20 by karai             #+#    #+#             */
-/*   Updated: 2025/04/19 10:48:13 by karai            ###   ########.fr       */
+/*   Updated: 2025/04/19 12:18:40 by karai            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -245,7 +245,7 @@ void				put_waltexture(t_all *all, int i);
 
 // init_mlx.c
 void				init_player(t_map *map, t_player *player);
-// void				init_map_arai(t_map *map);
+void				start_pos(t_map *map, t_player *player, size_t i, size_t j);
 
 // update.c
 
