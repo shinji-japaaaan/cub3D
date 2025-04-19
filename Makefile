@@ -1,36 +1,70 @@
-NAME = cub3d
-CC = cc
-MLX_DIR = ./mlx_linux
-MLX_FLAGS = -L$(MLX_DIR) -lmlx -lXext -lX11 -lm -lbsd
-LIBFT = libft.a
-LIBFT_PATH = ./libft
+# **************************************************************************** #
+#                                                                              #
+#                                                         :::      ::::::::    #
+#    Makefile                                           :+:      :+:    :+:    #
+#                                                     +:+ +:+         +:+      #
+#    By: karai <karai@student.42tokyo.jp>           +#+  +:+       +#+         #
+#                                                 +#+#+#+#+#+   +#+            #
+#    Created: 2025/03/21 12:07:24 by sishizaw          #+#    #+#              #
+#    Updated: 2025/04/19 10:02:56 by karai            ###   ########.fr        #
+#                                                                              #
+# **************************************************************************** #
 
-SRCS = main.c\
-		hit_horz.c\
-		hit_utils.c\
-		hit_vert.c\
-		utility_mlx.c\
-		img_raycast.c\
-		init.c\
-		update.c\
-		update_utils.c\
-		key_hook.c\
-		put_hd.c\
-		put_vd.c\
-		destroy_all.c\
+NAME = cub3D
+CC = cc
+CFLAGS = -Wall -Wextra -Werror
+
+MLX_DIR = ./mlx_linux
+MLX_LIB = $(MLX_DIR)/libmlx.a
+MLX_FLAGS = -L$(MLX_DIR) -lXext -lX11 -lm
+
+LIBFT_DIR = ./libft
+LIBFT = $(LIBFT_DIR)/libft.a
+LIBFT_FLAGS = -L$(LIBFT_DIR) -lft
+
+SRCS = ./srcs/main.c \
+		./srcs/init.c \
+		./srcs/parse_map1.c \
+		./srcs/parse_map1_2.c \
+		./srcs/parse_map2.c \
+		./srcs/parse_map3.c \
+		./srcs/parse_map4.c \
+		./srcs/parse_map4_2.c \
+		./srcs/parse_map4_3.c \
+		./srcs/parse_map4_4.c \
+		./srcs/parse_map4_5.c \
+		./srcs/parse_map4_6.c \
+		./srcs/parse_map4_7.c \
+		./srcs/free.c \
+		./srcs/check_map_content.c \
+		./srcs/check_map_structure.c \
+		./srcs/check_map_structure2.c \
+		./srcs/hit_horz.c\
+		./srcs/hit_utils.c\
+		./srcs/hit_vert.c\
+		./srcs/utility_mlx.c\
+		./srcs/img_raycast.c\
+		./srcs/init_mlx.c\
+		./srcs/update.c\
+		./srcs/update_utils.c\
+		./srcs/key_hook.c\
+		./srcs/put_hd.c\
+		./srcs/put_vd.c\
+		./srcs/destroy_all.c\
+
 
 OBJS = $(SRCS:.c=.o)
 
-all: $(NAME)
+all: $(LIBFT) $(MLX_LIB) $(NAME)
 
-$(NAME): $(OBJS) $(LIBFT_PATH)/$(LIBFT)
-	$(CC) -o $@ $^ $(MLX_FLAGS)
+$(LIBFT):
+	make -C $(LIBFT_DIR)
 
-%.o: %.C
-	$(CC) -Imlx_linux -03 -c $< -o $@
+$(MLX_LIB):
+	make -C $(MLX_DIR)
 
-$(LIBFT_PATH)/$(LIBFT):
-	make -C $(LIBFT_PATH) all
+$(NAME): $(OBJS) $(LIBFT) $(MLX_LIB)
+	$(CC) $(CFLAGS) $(OBJS) -o $(NAME) $(MLX_LIB) $(LIBFT_FLAGS) $(MLX_FLAGS)
 
 mlx:
 	make -C $(MLX_DIR) all
@@ -39,13 +73,14 @@ mlx_clean:
 	make -C $(MLX_DIR) clean
 
 clean:
-	make -C $(LIBFT_PATH) clean
 	rm -f $(OBJS)
+	make clean -C $(LIBFT_DIR)
+	make clean -C $(MLX_DIR)
 
 fclean: clean
-	make -C $(LIBFT_PATH) fclean
 	rm -f $(NAME)
+	make fclean -C $(LIBFT_DIR)
+	make clean -C $(MLX_DIR)
 
 re: fclean all
 
-.PHONY: all clean fclean re mlx mlx_clean

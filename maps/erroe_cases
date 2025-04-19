@@ -1,0 +1,40 @@
+F 220,100 234
+C 225,30,100,200
+
+F 300,-10,234
+C 256,30,-1
+
+
+F 220,100,2x4
+C 225,30,g100
+
+これはOK
+F 220, 100, 234
+C 225, 30, 100
+
+NO ./textures/wall_north.bmp
+SO ./textures/wall_south.png
+WE ./textures/wall_west.txt
+EA ./textures/wall_east.tiff
+
+NO ./textures/non_existent_wall_north.xpm
+SO ./textures/non_existent_wall_south.xpm
+WE ./textures/non_existent_wall_west.xpm
+EA ./textures/non_existent_wall_east.xpm
+
+NO /usr/local/textures/wall_north.xpm
+SO /usr/local/textures/wall_south.xpm
+WE /usr/local/textures/wall_west.xpm
+EA /usr/local/textures/wall_east.xpm
+
+NO 
+SO ./textures/wall_south.xpm
+WE ./textures/wall_west.xpm
+EA ./textures/wall_east.xpm
+
+NO ./textures/wall_north.xpm
+SO ./textures/wall_south.xpm
+WE ./textures/wall_west.xpm
+EA ./textures/wall_east.xpm
+OTHER ./textures/invalid_texture.xpm
+
