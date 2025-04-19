@@ -6,7 +6,7 @@
 /*   By: karai <karai@student.42tokyo.jp>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/21 12:10:04 by sishizaw          #+#    #+#             */
-/*   Updated: 2025/04/19 11:00:05 by karai            ###   ########.fr       */
+/*   Updated: 2025/04/19 16:50:38 by karai            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,7 +68,7 @@ int	main(int argc, char **argv)
 		exit(1);
 	}
 	initialize_all(all);
-	all->map = init_map();
+	init_map(all->map);
 	parse_cub_file(argv[1], all->map);
 	validate_map(all->map);
 	all->map->wind_width = all->map->width * TILE_SIZE;

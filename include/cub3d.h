@@ -6,7 +6,7 @@
 /*   By: karai <karai@student.42tokyo.jp>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/20 11:25:20 by karai             #+#    #+#             */
-/*   Updated: 2025/04/19 12:18:40 by karai            ###   ########.fr       */
+/*   Updated: 2025/04/19 16:30:06 by karai            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,6 @@
 # define MAX_MAP_WIDTH 100
 # define BUFFER_SIZE 1024
 # define TILE_SIZE 32
-# define IMG_SIZE 64
 # define WIND_HEIGHT 960
 # define WIND_WIDTH 1280
 # define FOV_ANGLE 60
@@ -130,6 +129,8 @@ typedef struct s_xpm
 	int				line_length;
 	int				endian;
 	int				bpp;
+	int				width;
+	int				height;
 }					t_xpm;
 
 typedef struct s_img
@@ -143,8 +144,7 @@ typedef struct s_img
 
 typedef struct s_all
 {
-	// t_map			map[1];
-	t_map			*map;
+	t_map			map[1];
 	t_ray			ray[1];
 	t_player		player[1];
 	t_img			img;
@@ -168,7 +168,7 @@ void				loop_function(t_all *all);
 
 // init.c
 char				**init_lines(int *capacity);
-t_map				*init_map(void);
+void				init_map(t_map *map);
 t_game				*init_game(t_map *map);
 void				init_flags(t_flags *f);
 void				start_game(t_game *game, t_map *map);
@@ -198,7 +198,6 @@ int					parse_color_value(char *line, int *i);
 void				set_flag(int *flag, int *error);
 void				print_error_and_exit(char *message);
 void				print_perror_and_exit(char *message);
-void				cleanup_and_exit(t_game *game, int exit_code);
 int					error(char *msg);
 
 // check_map_content.c
@@ -260,14 +259,16 @@ int					ft_key_release(int keycode, t_all *all);
 int					ft_key_press(int keycode, t_all *all);
 
 // put_vd.c
-int					get_img_horz_idx_v(t_all *all, double dist);
+int					get_img_horz_idx_v(t_all *all, double dist, t_xpm *xpm_var);
 void				put_1line_case_vd(t_all *all, int i, double vd);
-void				put_1line_vert(t_all *all, int i, double dist);
+void				put_1line_vert(t_all *all, int i, double dist,
+						t_xpm *xpm_var);
 
 // put_hd.c
-int					get_img_horz_idx_h(t_all *all, double dist);
+int					get_img_horz_idx_h(t_all *all, double dist, t_xpm *xpm_var);
 void				put_1line_case_hd(t_all *all, int i, double hd);
-void				put_1line_horz(t_all *all, int i, double dist);
+void				put_1line_horz(t_all *all, int i, double dist,
+						t_xpm *xpm_var);
 
 // destroy_all.c
 void				destroy_all(t_all *all);

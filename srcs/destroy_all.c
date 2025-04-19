@@ -6,7 +6,7 @@
 /*   By: karai <karai@student.42tokyo.jp>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/04 23:00:30 by karai             #+#    #+#             */
-/*   Updated: 2025/04/19 10:58:41 by karai            ###   ########.fr       */
+/*   Updated: 2025/04/19 16:40:55 by karai            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,4 +29,5 @@ void	destroy_all(t_all *all)
 	if (all->mlx)
 		mlx_destroy_display(all->mlx);
 	free(all->mlx);
+	free_all(all->map);
 }

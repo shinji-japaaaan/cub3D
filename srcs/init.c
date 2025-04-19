@@ -6,7 +6,7 @@
 /*   By: karai <karai@student.42tokyo.jp>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/21 13:39:29 by sishizaw          #+#    #+#             */
-/*   Updated: 2025/04/19 10:55:24 by karai            ###   ########.fr       */
+/*   Updated: 2025/04/19 16:54:44 by karai            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,20 +23,11 @@ char	**init_lines(int *capacity)
 	return (lines);
 }
 
-t_map	*init_map(void)
+void	init_map(t_map *map)
 {
-	t_map	*map;
-
-	map = malloc(sizeof(t_map));
-	if (!map)
-	{
-		perror("Memory allocation failed");
-		exit(EXIT_FAILURE);
-	}
 	ft_memset(map, 0, sizeof(t_map));
 	map->floor_color = -1;
 	map->ceil_color = -1;
-	return (map);
 }
 
 void	init_flags(t_flags *f)

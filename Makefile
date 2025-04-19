@@ -6,7 +6,7 @@
 #    By: karai <karai@student.42tokyo.jp>           +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/03/21 12:07:24 by sishizaw          #+#    #+#              #
-#    Updated: 2025/04/19 10:02:56 by karai            ###   ########.fr        #
+#    Updated: 2025/04/19 16:56:54 by karai            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -14,7 +14,7 @@ NAME = cub3D
 CC = cc
 CFLAGS = -Wall -Wextra -Werror
 
-MLX_DIR = ./mlx_linux
+MLX_DIR = ./minilibx-linux
 MLX_LIB = $(MLX_DIR)/libmlx.a
 MLX_FLAGS = -L$(MLX_DIR) -lXext -lX11 -lm
 

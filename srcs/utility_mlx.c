@@ -6,7 +6,7 @@
 /*   By: karai <karai@student.42tokyo.jp>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/20 11:38:35 by karai             #+#    #+#             */
-/*   Updated: 2025/04/19 10:39:12 by karai            ###   ########.fr       */
+/*   Updated: 2025/04/19 16:48:45 by karai            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,9 +14,8 @@
 
 void	get_xpm(t_all *all, t_xpm *xpm, char *tex_path)
 {
-	int	tmp1;
-
-	xpm->map = mlx_xpm_file_to_image(all->mlx, tex_path, &tmp1, &tmp1);
+	xpm->map = mlx_xpm_file_to_image(all->mlx, tex_path, &(xpm->width),
+			&(xpm->height));
 	xpm->addr = mlx_get_data_addr(xpm->map, &(xpm->bpp), &(xpm->line_length),
 			&(xpm->endian));
 }
@@ -35,6 +34,7 @@ void	initialize_all(t_all *all)
 	all->xpm_we->addr = NULL;
 	all->xpm_ea->map = NULL;
 	all->xpm_ea->addr = NULL;
+	all->last_scan = 0;
 }
 
 void	initialize_window(t_all *all)
