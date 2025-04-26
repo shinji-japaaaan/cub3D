@@ -67,7 +67,7 @@ static int	open_file(const char *filename)
 
 	if (!filename || ft_strlen(filename) < 4 || ft_strcmp(filename
 			+ ft_strlen(filename) - 4, ".cub") != 0)
-		print_error_and_exit("Error:Invalid file format (expected .cub file)\n");
+		print_error_and_exit("Error:Invalid file format (expected .cub)\n");
 	fd = open(filename, O_RDONLY);
 	if (fd == -1)
 		print_perror_and_exit("Error opening file\n");
